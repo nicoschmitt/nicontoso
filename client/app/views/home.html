@@ -7,6 +7,9 @@
         </form>
         <div class="tenant-checked" layout="row">
             <div flex="100" flex-gt-sm="40">
+                <div ng-show="vm.loading">
+                    <i class="fa fa-cog fa-spin fa-4x"></i>
+                </div>
                 <div ng-repeat="tenant in vm.checked" ng-class="['tenant', { available: !tenant.taken }]">
                     {{tenant.name}}
                 </div>

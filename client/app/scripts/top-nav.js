@@ -13,7 +13,13 @@
             }
             
             vm.login = function() {
-                adal.login();
+                if ($location.protocol() == "http") {
+                    var host = $location.host();
+                    var url = "https://" + host + "/#Login"
+                    window.location = url;
+                } else {
+                    adal.login();
+                }
             };
             
             vm.logout = function() {
