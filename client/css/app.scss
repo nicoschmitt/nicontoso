@@ -1,0 +1,110 @@
+$black: #333;
+$white: #eee;
+$red: ##d51b1b;
+$green: green;
+
+html, body {
+    background-color: $black;
+}
+
+body {
+    padding: 20px;
+}
+
+h1 {
+    font-size: 3.400rem;
+    font-weight: 300;
+    line-height: 4rem;
+}
+h2 {
+    font-size: 2.400rem;
+    font-weight: 300;
+    line-height: 3.2rem;
+}
+h3 {
+    font-size: 2.000rem;
+    font-weight: 300;
+    letter-spacing: 0.005em;
+}
+h4 {
+    font-size: 1.600rem;
+    font-weight: 300;
+    letter-spacing: 0.010em;
+}
+
+a {
+    text-decoration: none;
+}
+
+.top-nav {
+    h1, h2, span { font-weight: 300; }
+    
+    .nav-app-title {
+        margin-right: 10px;
+    }
+    
+    .nav-menu-item {
+        margin: 5px 5px 5px 5px;
+        padding: 0 10px 0 10px;
+        font-size: 70%;
+        
+        &.active {
+            background-color: rgba(255,255,255,.1);
+        }
+    }
+}
+
+.topnav-container {
+    margin-bottom: 20px;
+}
+ 
+.main {
+    color: $black;
+    background-color: $white;
+}
+
+.maincontent {
+    padding: 15px;
+}
+
+.small {
+    font-size: 65%;    
+}
+
+.pointer {
+    cursor: pointer;
+};
+
+// ---- Home ----
+
+.tenant-form {
+    input[type="text"]{ padding: 8px; line-height: 28px; }
+}
+
+.tenant-checked {
+    margin-bottom: 30px;
+    
+    .tenant {
+        margin: 10px 0px;
+        padding: 10px;
+        color: $white;
+        background-color: $red;
+        border-radius: 5px;
+        
+        &.available {
+            background-color: $green;
+        }
+    }
+}
+
+// ----Alert ----
+
+.alert {
+    border: 0;
+    border-radius: 0;
+    
+    &.alert-danger {
+        background-color: #f44336;
+        color: rgba(255,255,255, 0.84);
+    }
+}

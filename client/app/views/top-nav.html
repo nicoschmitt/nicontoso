@@ -1,0 +1,24 @@
+<md-toolbar class="top-nav">
+    <div class="md-toolbar-tools">
+        <h2 class="nav-app-title">
+            <a href="/">nicontoso</a>
+        </h2>
+        <span flex></span>
+        <span ng-show="vm.isAuthenticated()" hide-xs>
+            <i class="fa fa-user"></i> {{vm.getUsername()}}
+        </span>
+        <md-menu md-position-mode="target-right target">
+            <md-button class="md-icon-button" aria-label="More" ng-show="vm.isAuthenticated()">
+                <md-icon md-font-set="material-icons" ng-click="$mdOpenMenu($event)">more_vert</md-icon>
+            </md-button>
+            <md-menu-content>
+                <md-menu-item>
+                    <md-button class="md-primary" ng-click="vm.logout()">Logout</md-button>
+                </md-menu-item>
+            </md-menu-content>
+        </md-menu>
+        <span ng-hide="vm.isAuthenticated()">
+            <a href="" ng-click="vm.login()">Login</a>
+        </span>
+      </div>
+</md-toolbar>
