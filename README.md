@@ -1,4 +1,4 @@
 
-## Install
+## Sync
 
 git push azure master

@@ -10,7 +10,7 @@
         
         app.use('/api/config', require('./api/config'));
         app.use('/api/tenant', require('./api/tenant'));
-        //app.use('/api/data', require('./api/data'));
+        app.use('/api/rss', require('./api/rss'));
     };
 
     module.exports.register = register;
