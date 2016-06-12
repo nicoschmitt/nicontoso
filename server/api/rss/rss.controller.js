@@ -86,7 +86,7 @@
                     feed.item({
                         title: doc.id,
                         description: "See <a href='https://www.microsoft.com/en-us/licensing/product-licensing/products.aspx'>here</a>",
-                        url: "https://www.microsoft.com/en-us/licensing/product-licensing/products.aspx",
+                        url: doc.url,
                         guid: doc.id,
                         date: moment().date(1).toDate(),
                         enclosure: {
