@@ -6,6 +6,7 @@
     var controller = require('./rss.controller');
     
     router.get("/reddit", controller.reddit);
+    router.get("/vldocs", controller.vldocs);
     
     module.exports = router;
     
