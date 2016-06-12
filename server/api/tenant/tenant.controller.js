@@ -12,10 +12,11 @@
         };
         
         request.post({ url: url, form: form }, function(err, httpResponse, body) {
-            if (body.indexOf("<response><![CDATA[0]]></response>") >= 0) {
-                res.json({ taken: true }); 
-            } else {
+            //console.log(body);
+            if (body.indexOf("<response><![CDATA[1]]></response>") >= 0) {
                 res.json({ taken: false }); 
+            } else {
+                res.json({ taken: true }); 
             }
         });
     }

@@ -21,15 +21,23 @@
             
             vm.checkTenant = function() {
                 vm.name = vm.name.trim();
-                vm.loading = true;
-                $http.get("/api/tenant/" + vm.name).then(function(resp) {
-                    vm.loading = false;
+                if (vm.name.match(/\W/)) {
                     vm.checked.unshift({
-                        name: vm.name,
-                        taken: resp.data.taken 
+                        name: vm.name + " (invalid)",
+                        taken: true 
                     });
                     vm.name = "";
-                });   
+                } else {
+                    vm.loading = true;
+                    $http.get("/api/tenant/" + vm.name).then(function(resp) {
+                        vm.loading = false;
+                        vm.checked.unshift({
+                            name: vm.name,
+                            taken: resp.data.taken 
+                        });
+                        vm.name = "";
+                    });   
+                }
             }
         }
     ]);

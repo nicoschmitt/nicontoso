@@ -22,7 +22,27 @@
             "outDir": null
         },
         {
-            "name": "Launch debug",
+            "name": "Launch Production",
+            "type": "node",
+            "request": "launch",
+            "program": "${workspaceRoot}/server.js",
+            "stopOnEntry": false,
+            "args": [],
+            "cwd": "${workspaceRoot}",
+            "preLaunchTask": null,
+            "runtimeExecutable": null,
+            "runtimeArgs": [
+                "--nolazy"
+            ],
+            "env": {
+                "NODE_ENV": "production"
+            },
+            "externalConsole": false,
+            "sourceMaps": false,
+            "outDir": null
+        },
+        {
+            "name": "debug.js",
             "type": "node",
             "request": "launch",
             "program": "${workspaceRoot}/debug.js",

@@ -36,26 +36,26 @@ a {
     text-decoration: none;
 }
 
-.top-nav {
-    h1, h2, span { font-weight: 300; }
-    
-    .nav-app-title {
-        margin-right: 10px;
-    }
-    
-    .nav-menu-item {
-        margin: 5px 5px 5px 5px;
-        padding: 0 10px 0 10px;
-        font-size: 70%;
-        
-        &.active {
-            background-color: rgba(255,255,255,.1);
-        }
-    }
-}
-
 .topnav-container {
     margin-bottom: 20px;
+
+    .top-nav {
+        h1, h2, span { font-weight: 300; }
+        
+        .nav-app-title {
+            margin-right: 10px;
+        }
+        
+        .nav-menu-item {
+            margin: 5px 5px 5px 5px;
+            padding: 0 10px 0 10px;
+            font-size: 70%;
+            
+            &.active {
+                background-color: rgba(255,255,255,.1);
+            }
+        }
+    }
 }
  
 .main {

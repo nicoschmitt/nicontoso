@@ -69,8 +69,7 @@
                 var name = doc.text();
                 var month = name.substring(name.lastIndexOf("(") + 1);
                 month = month.substring(0, month.indexOf(")"));
-                console.log(month);
-
+              
                 cb(null, {
                     id: name,
                     month: month,
