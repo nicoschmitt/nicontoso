@@ -1,11 +1,11 @@
 (function(){
     var moment     = require("moment")
-    var Data       = require("./data.model");
+    var MicData    = require("./data.model");
     var UpdateInfo = require("./info.model");
     var sendgrid   = require('sendgrid')(process.env.SENDGRID_APIKEY);
     
     function GetDataForUser(user, cb) {
-        Data.find({ user: user, fiscal: process.env.CURRENT_FISCAL }, { user:0, fiscal:0, _id: 0, __v: 0 }).sort("date").lean().exec(function(err, data) {
+        MicData.find({ user: user, fiscal: process.env.CURRENT_FISCAL }, { user:0, fiscal:0, _id: 0, __v: 0 }).sort("date").lean().exec(function(err, data) {
             if (data && data.length > 0) {
                 var latest = data[data.length - 1].date.getTime();
                 data.forEach(d => {
@@ -63,7 +63,7 @@
             });
         } else {
             var search = { user: user, fiscal: process.env.CURRENT_FISCAL, quarter: quarter };
-            Data.findOne(search, { user:0, fiscal:0, _id: 0, __v: 0 }).sort("-date").exec(function(err, data) {
+            MicData.findOne(search, { user:0, fiscal:0, _id: 0, __v: 0 }).sort("-date").exec(function(err, data) {
                 return res.json(data);
             });
         }

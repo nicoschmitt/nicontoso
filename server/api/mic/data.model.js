@@ -35,7 +35,6 @@
         VoiceTarget: Number
     })
         
-    var Data = mongoose.model("Data", dataSchema);
-    module.exports = Data;
+    module.exports = mongoose.model("MicData", dataSchema);
     
 }());
