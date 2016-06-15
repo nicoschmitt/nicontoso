@@ -11,6 +11,7 @@
         app.use('/api/config', require('./api/config'));
         app.use('/api/tenant', require('./api/tenant'));
         app.use('/api/rss', require('./api/rss'));
+        app.use('/api/mic', require('./api/mic'));
     };
 
     module.exports.register = register;

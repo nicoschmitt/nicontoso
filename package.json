@@ -32,11 +32,12 @@
     "mongodb": "^2.1.2",
     "mongoose": "^4.4.12",
     "passport": "^0.3.2",
-    "passport-azure-ad": "^2.0.0",
+    "passport-azure-ad": "^1.4.4",
     "passport-strategy": "^1.0.0",
     "querystring": "^0.2.0",
     "request": "^2.72.0",
     "rss": "^1.2.1",
+    "sendgrid": "^3.0.4",
     "shortid": "^2.2.6",
     "util": "^0.10.3",
     "xml2js": "^0.4.16"

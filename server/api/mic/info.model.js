@@ -7,7 +7,6 @@
         when: Date
     })
         
-    var UpdateInfo = mongoose.model("MicUpdateInfo", dataSchema);
-    module.exports = UpdateInfo;
+    module.exports = mongoose.model("MicUpdateInfo", dataSchema);
     
 }());

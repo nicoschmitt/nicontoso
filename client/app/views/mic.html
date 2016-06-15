@@ -1,0 +1,69 @@
+<div layout-padding flex="grow" ng-hide="vm.isAuthenticated()">
+    <h3>Please <a href="#/Login">log in</a>.<h3>
+</div>
+
+<div layout="column" ng-show="vm.isAuthenticated()">
+    <div class="maincontent" ng-show="vm.loading">
+        <i class="fa fa-cog fa-spin fa-5x"></i>
+        <p></p>
+    </div>
+    <div class="alert alert-dismissible alert-danger" ng-show="vm.message.length">
+        <strong>Oups</strong> 
+        <p>{{vm.message}}</p>
+    </div>
+    <div ng-hide="vm.loading">
+        <md-tabs md-selected="vm.selectedTab" md-dynamic-height>
+            <md-tab ng-repeat="quarter in vm.quarters" label="{{quarter.name}}">
+                <div class='tabcontent' layout="column" layout-align="start stretch">
+                    <div layout="row" layout-xs="column">
+                        <md-card flex-gt-xs="33">
+                            <md-card-title>
+                                <md-card-title-text>
+                                    <span class="md-headline">PG1</span>
+                                    <div layout="column" layout-align="center start" class="kpi md-display-1">
+                                        <span>{{quarter.current.PG1}}%</span>
+                                        <span class="togo">Togo: ${{quarter.current.nicePG1Togo}}</span>
+                                    </div>
+                                </md-card-title-text>
+                            </md-card-title>
+                        </md-card>
+                        <md-card flex-gt-xs="33">
+                            <md-card-title>
+                                <md-card-title-text>
+                                    <span class="md-headline">PG2</span>
+                                    <div layout="column" layout-align="center start" class="kpi md-display-1">
+                                        <span>{{quarter.current.PG2}}%</span>
+                                        <span class="togo">Togo: ${{quarter.current.nicePG2Togo}}</span>
+                                    </div>
+                                </md-card-title-text>
+                            </md-card-title>
+                        </md-card>
+                        <md-card flex-gt-xs="33">
+                            <md-card-title>
+                                <md-card-title-text>
+                                    <span class="md-headline">Global</span>
+                                    <div layout="column" layout-align="center start" class="kpi md-display-1">
+                                        <span>{{quarter.current.globalAttainment}}%</span>
+                                    </div>
+                                </md-card-title-text>
+                            </md-card-title>
+                        </md-card>
+                    </div>
+                    <div class="chart-container">
+                        <canvas class="chart chart-line chart-xs ng-isolate-scope" 
+                                chart-series="quarter.hist.series"
+                                chart-labels="quarter.hist.labels"
+                                chart-data="quarter.hist.data" 
+                                chart-options="vm.chartoptions"
+                                chart-legend="false">
+                        </canvas>
+                    </div>
+                </div>
+            </md-tab>
+        </md-tabs>
+        <div ng-show="vm.quarters.length" class="updated">Last update {{vm.updated}}</div>
+        <div ng-hide="vm.loading || vm.quarters.length" class="nodata">
+            No data.
+        </div>
+    </div>
+</div>

@@ -1,8 +1,14 @@
 (function(){
-    var moment     = require("moment")
+    var moment     = require("moment");
+    var Config     = require("../config/config.model");
     var MicData    = require("./data.model");
     var UpdateInfo = require("./info.model");
-    var sendgrid   = require('sendgrid')(process.env.SENDGRID_APIKEY);
+    var sendgrid   = require('sendgrid').SendGrid(process.env.SENDGRID_APIKEY);
+
+    var micdomain = "";
+    Config.findOne({ }, { __v:0, _id:0 }).lean().exec(function(err, config) {
+        micdomain = config.micdomain;
+    });
     
     function GetDataForUser(user, cb) {
         MicData.find({ user: user, fiscal: process.env.CURRENT_FISCAL }, { user:0, fiscal:0, _id: 0, __v: 0 }).sort("date").lean().exec(function(err, data) {
@@ -17,21 +23,23 @@
     }
   
     function SendMail(user, msg) {
-        var payload   = {
-            to      : user + "@" + process.env.USER_EMAIL_DOMAIN,
-            from    : process.env.EMAIL_SENT_FROM,
-            subject : 'myMIC',
-            html    : msg
-        };
-        
-        sendgrid.send(payload, function(err, json) {
-            if (err) { console.error(err); }
+        Config.findOne({ }, { __v:0, _id:0 }).lean().exec(function(err, config) {
+
+            var email = new sendgrid.Email();
+
+            email.addTo(user + "@" + config.micdomain);
+            email.setFrom(process.env.EMAIL_SENT_FROM);
+            email.setSubject("myMIC");
+            email.setHtml(msg);
+
+            sendgrid.send(email);
+
         });
     }
   
     module.exports.getcurrentdata = function(req, res) {
         var email = req.user.preferred_username;
-        if (!email.endsWith(process.env.USER_EMAIL_DOMAIN)) return res.json({});
+        if (!email.endsWith(micdomain)) return res.json({});
         var user = email.substr(0, email.indexOf("@"));
         
         UpdateInfo.findOne({ user: user }, function(err, info) {
@@ -78,12 +86,12 @@
         if (!m.isValid()) return res.status(400).send("invalid date");
         req.body.date = m.toDate();
         
-        Data.findOne({ user: user, fiscal: req.body.fiscal, quarter: req.body.quarter, date: req.body.date }, function(err, doc) {
+        MicData.findOne({ user: user, fiscal: req.body.fiscal, quarter: req.body.quarter, date: req.body.date }, function(err, doc) {
             if (doc) {
                 console.log("already exists");
                 res.json({ already: true });
             } else {
-                Data.findOne({ user: user, fiscal: req.body.fiscal, quarter: req.body.quarter }).sort("-date").exec(function(err, doc) {
+                MicData.findOne({ user: user, fiscal: req.body.fiscal, quarter: req.body.quarter }).sort("-date").exec(function(err, doc) {
                     if (doc) {
                         var changed = false;
                         var msg = "Something has changed for " + req.body.quarter + ".<br />\r\n";
@@ -100,14 +108,14 @@
                         }
                     }
                    
-                    var data = new Data({ user: user });
+                    var data = new MicData({ user: user });
                     Object.keys(req.body).forEach(k => {
                         data[k] = req.body[k];
                     });
                     
                     data.save(function(err, doc){
                         if (err) console.log(err);
-                        UpdateInfo.findOneAndUpdate({ user: user }, { when: Date.now() }, { upsert: true }, function() {
+                        UpdateInfo.findOneAndUpdate({ user: user }, { user: user, when: Date.now() }, { upsert: true }, function() {
                             res.json({ done: true }); 
                         })
                     }); 

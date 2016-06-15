@@ -1,6 +1,5 @@
-/* global angular */
 (function() {
-    var app = angular.module('myApp', [ 'ngRoute', "AdalAngular", "ngMaterial" ]);
+    var app = angular.module('myApp', [ 'ngRoute', "AdalAngular", "ngMaterial", "chart.js" ]);
   
     app.config(["adalAppId", '$routeProvider', '$httpProvider', "adalAuthenticationServiceProvider",
         function (adalAppId, $routeProvider, $httpProvider, adalProvider) {
@@ -10,6 +9,12 @@
                 controller: "homeCtrl",
                 controllerAs: "vm"
                 
+            }).when("/Mic", {
+                requireADLogin: true,
+                templateUrl: "/app/views/mic.html",
+                controller: "micCtrl",
+                controllerAs: "vm"
+
             }).when("/Login", {
                 requireADLogin: true,
                 redirectTo: "/Home"
