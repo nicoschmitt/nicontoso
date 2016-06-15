@@ -1,8 +1,8 @@
 (function() {
     var app = angular.module('myApp', [ 'ngRoute', "AdalAngular", "ngMaterial", "chart.js" ]);
   
-    app.config(["adalAppId", '$routeProvider', '$httpProvider', "adalAuthenticationServiceProvider",
-        function (adalAppId, $routeProvider, $httpProvider, adalProvider) {
+    app.config(["$config", '$routeProvider', '$httpProvider', "adalAuthenticationServiceProvider",
+        function ($config, $routeProvider, $httpProvider, adalProvider) {
 
             $routeProvider.when("/Home", {
                 templateUrl: "/app/views/home.html",
@@ -23,7 +23,7 @@
             
             adalProvider.init({
                 tenant: "common",
-                clientId: adalAppId
+                clientId: $config.adalAppId
             }, $httpProvider);
     }]);
    
@@ -33,7 +33,7 @@
         var initInjector = angular.injector(["ng"]);
         var $http = initInjector.get("$http");
         return $http.get("/api/config").then(function(resp){
-            app.constant("adalAppId", resp.data.adalAppId);
+            app.constant("$config", resp.data);
         });
     };
 

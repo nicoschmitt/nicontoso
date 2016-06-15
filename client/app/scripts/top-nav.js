@@ -2,16 +2,16 @@
     
     var app = angular.module('myApp');
   
-    app.controller('topNavCtrl', ["$rootScope", "$location", 'adalAuthenticationService', "$http", 
-        function ($rootScope, $location, adal, $http) {
+    app.controller('topNavCtrl', ["$config", "$rootScope", "$location", 'adalAuthenticationService', "$http", 
+        function ($config, $rootScope, $location, adal, $http) {
             var vm = this;
             
             vm.isAuthenticated = function() { return adal.userInfo.isAuthenticated }
             
-            vm.goToProfile = function() {
-                $location.path("/Me");
+            vm.micAccess = function() {
+                return vm.isAuthenticated() && adal.userInfo.userName.endsWith($config.micdomain);
             }
-            
+
             vm.login = function() {
                 if ($location.protocol() == "http") {
                     var host = $location.host();

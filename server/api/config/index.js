@@ -8,7 +8,6 @@
     var getConfig = function(req, res) {
 
         Config.findOne({ }, { __v:0, _id:0 }).lean().exec(function(err, config) {
-            console.log(config);
             res.json({ 
                 env: process.env.NODE_ENV,
                 adalAppId: process.env.MS_APP_ID,
