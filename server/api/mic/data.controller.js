@@ -3,7 +3,7 @@
     var Config     = require("../config/config.model");
     var MicData    = require("./data.model");
     var UpdateInfo = require("./info.model");
-    var sendgrid   = require('sendgrid').SendGrid(process.env.SENDGRID_APIKEY);
+    var sendgrid   = require('sendgrid');
 
     var micdomain = "";
     Config.findOne({ }, { __v:0, _id:0 }).lean().exec(function(err, config) {
@@ -25,14 +25,24 @@
     function SendMail(user, msg) {
         Config.findOne({ }, { __v:0, _id:0 }).lean().exec(function(err, config) {
 
-            var email = new sendgrid.Email();
+            var sender = sendgrid.SendGrid(process.env.SENDGRID_APIKEY);
+            var helper = sendgrid.mail;
 
-            email.addTo(user + "@" + config.micdomain);
-            email.setFrom(process.env.EMAIL_SENT_FROM);
-            email.setSubject("myMIC");
-            email.setHtml(msg);
+            mail = new helper.Mail(
+                new helper.Email(process.env.EMAIL_SENT_FROM), 
+                "myMIC", 
+                new helper.Email(user + "@" + config.micdomain),  
+                new helper.Content("text/html", msg)
+            );
 
-            sendgrid.send(email);
+            var emptyRequest = require('sendgrid-rest').request;
+            var requestPost = sender.emptyRequest();
+            requestPost.method = 'POST';
+            requestPost.path = '/v3/mail/send';
+            requestPost.body = mail.toJSON();
+            sender.API(requestPost, function (response) { 
+                //console.log(response);
+            });
 
         });
     }
@@ -114,10 +124,13 @@
                     });
                     
                     data.save(function(err, doc){
-                        if (err) console.log(err);
-                        UpdateInfo.findOneAndUpdate({ user: user }, { user: user, when: Date.now() }, { upsert: true }, function() {
-                            res.json({ done: true }); 
-                        })
+                        if (err) { console.log(err); res.status(500).send(err); }
+                        else {
+                            UpdateInfo.findOneAndUpdate({ user: user }, { user: user, when: Date.now() }, { upsert: true }, function(err, doc) {
+                                if (err) { console.log(err); res.status(500).send(err); }
+                                else { res.json({ done: true }); }
+                            });
+                        }
                     }); 
                 });
             }

@@ -100,6 +100,31 @@
 
     }
 
-    testconfig();
+    function testEMail() {
+        var sendgrid   = require('sendgrid');
+
+        var msg = "bonjour";
+
+        var sender = sendgrid.SendGrid(process.env.SENDGRID_APIKEY);
+        var helper = sendgrid.mail;
+
+        mail = new helper.Mail(
+            new helper.Email(process.env.EMAIL_SENT_FROM), 
+            "myMIC", 
+            new helper.Email("nicolass@microsoft.com"),  
+            new helper.Content("text/html", msg)
+        );
+
+        var emptyRequest = require('sendgrid-rest').request;
+        var requestPost = sender.emptyRequest();
+        requestPost.method = 'POST';
+        requestPost.path = '/v3/mail/send';
+        requestPost.body = mail.toJSON();
+        sender.API(requestPost, function (response) { 
+            console.log(response);
+        });
+    }
+
+    testEMail();
 
 }());
