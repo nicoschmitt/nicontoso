@@ -12,6 +12,7 @@
         app.use('/api/tenant', require('./api/tenant'));
         app.use('/api/rss', require('./api/rss'));
         app.use('/api/mic', require('./api/mic'));
+        app.use('/api/redirect', require('./api/redirect'));
     };
 
     module.exports.register = register;

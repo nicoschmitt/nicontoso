@@ -52,7 +52,7 @@
         var feed = new RSS({
             title:       'Volume licensing',
             description: 'VL documents',
-            site_url :   'https://www.microsoft.com/en-us/licensing/product-licensing/products.aspx',
+            site_url :   "http://" + req.headers.host + "/api/redirect/https://www.microsoft.com/en-us/licensing/product-licensing/products.aspx",
             ttl: 24*60 // 1 day
         });
 
