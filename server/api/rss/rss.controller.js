@@ -96,7 +96,7 @@
                 }
             }, this);
 
-            res.type("application/atom+xml").send(feed.xml());
+            res.type("application/rss+xml").send(feed.xml());
         });
     }
   
