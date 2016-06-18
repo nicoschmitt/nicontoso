@@ -13,6 +13,7 @@
         app.use('/api/rss', require('./api/rss'));
         app.use('/api/mic', require('./api/mic'));
         app.use('/api/redirect', require('./api/redirect'));
+        app.use('/api/travel', require('./api/travel'));
     };
 
     module.exports.register = register;
