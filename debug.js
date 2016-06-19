@@ -125,6 +125,14 @@
         });
     }
 
-    testEMail();
+    function test() {
+        var entities = require("entities");
+
+        var url = "https://i.reddituploads.com/7af8856a278c40259128c182ce37666e?fit=max&amp;h=1536&amp;w=1536&amp;s=c88d06fa12bd4cc61daf78d48d9c7426";
+        url = entities.decodeHTML(url);
+        console.log(url);
+    }
+
+    test();
 
 }());

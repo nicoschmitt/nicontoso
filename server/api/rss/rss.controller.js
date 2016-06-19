@@ -8,6 +8,7 @@
     var async = require("async");
     var cheerio = require('cheerio');
     var RSSVL = require("./rssvl.model");
+    var entities = require("entities");
 
     module.exports.reddit = function(req, res) {
         var url = "http://www.reddit.com/.rss";
@@ -19,6 +20,7 @@
                     var content = element.content[0]["_"];
                     var link = content.substring(0, content.lastIndexOf("\">[link]"));
                     link = link.substring(link.lastIndexOf("href") + "href= ".length);
+                    link = entities.decodeHTML(link);
                     element.link[0]["$"].href = link;
                 }, this);
 
