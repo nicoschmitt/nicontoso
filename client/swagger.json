@@ -1,0 +1,56 @@
+{
+    "swagger": "2.0",
+    "info": {
+        "version": "1.0.0",
+        "title": "Travel Time"
+    },
+    "paths": {
+        "/api/travel": {
+            "get": {
+                "description": "Gets available routes and travel time\n",
+                "parameters": [
+                    {
+                        "name": "from",
+                        "in": "query",
+                        "description": "departure",
+                        "required": true,
+                        "type": "string",
+                        "format": "latitude,longitude"
+                    },
+                    {
+                        "name": "to",
+                        "in": "query",
+                        "description": "arrival",
+                        "required": true,
+                        "type": "string",
+                        "format": "latitude,longitude"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful response",
+                        "schema": {
+                            "title": "ArrayOfRoutes",
+                            "type": "array",
+                            "items": {
+                                "title": "Route",
+                                "type": "object",
+                                "properties": {
+                                    "name": {
+                                        "type": "string"
+                                    },
+                                    "time": {
+                                        "type": "number"
+                                    },
+                                    "dist": {
+                                        "type": "number"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

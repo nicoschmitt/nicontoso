@@ -1,0 +1,56 @@
+# Example YAML to get you started quickly.
+# Be aware that YAML has indentation based scoping.
+# Code completion support is available so start typing for available options.
+swagger: '2.0'
+
+# This is your document metadata
+info:
+  version: "1.0.0"
+  title: Travel Time
+
+# Describe your paths here
+paths:
+  # This is a path endpoint. Change it.
+  /api/travel:
+    # This is a HTTP operation
+    get:
+      # Describe this verb here. Note: you can use markdown
+      description: |
+        Gets available routes and travel time
+      # This is array of GET operation parameters:
+      parameters:
+        # An example parameter that is in query and is required
+        -
+          name: from
+          in: query
+          description: departure
+          required: true
+          type: string
+          format: latitude,longitude
+        -
+          name: to
+          in: query
+          description: arrival
+          required: true
+          type: string
+          format: latitude,longitude
+      # Expected responses for this operation:
+      responses:
+        # Response code
+        200:
+          description: Successful response
+          # A schema describing your response object.
+          # Use JSON Schema format
+          schema:
+            title: ArrayOfRoutes
+            type: array
+            items:
+              title: Route
+              type: object
+              properties:
+                name:
+                  type: string
+                time:
+                  type: number
+                dist:
+                  type: number
