@@ -2,11 +2,16 @@
     "swagger": "2.0",
     "info": {
         "version": "1.0.0",
-        "title": "Travel Time"
+        "title": "Travel Time",
+        "contact": {
+            "name": "Nicolas Schmitt",
+            "email": "nicontoso@outlook.com"
+        }
     },
     "paths": {
         "/api/travel": {
             "get": {
+                "summary": "Travel Time",
                 "description": "Gets available routes and travel time\n",
                 "parameters": [
                     {
