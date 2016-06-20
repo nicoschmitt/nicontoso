@@ -104,7 +104,8 @@
                 MicData.findOne({ user: user, fiscal: req.body.fiscal, quarter: req.body.quarter }).sort("-date").exec(function(err, doc) {
                     if (doc) {
                         var changed = false;
-                        var msg = "Something has changed for " + req.body.quarter + ".<br />\r\n";
+                        var msg = "<div style='font-size:11.0pt;font-family:\"Calibri\",sans-serif;'>";
+                        msg += "Something has changed for " + req.body.quarter + ".<br />\r\n";
                         Object.keys(req.body).forEach(k => {
                             if (k.toLowerCase().indexOf("target") >= 0) {
                                 if (doc[k] != req.body[k]) {
@@ -113,6 +114,7 @@
                                 }
                             }
                         });
+                        msg += "</div>";
                         if (changed) {
                             SendMail(user, msg);
                         }

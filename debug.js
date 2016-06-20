@@ -103,7 +103,8 @@
     function testEMail() {
         var sendgrid   = require('sendgrid');
 
-        var msg = "bonjour";
+        var msg = "<div style='font-size:11.0pt;font-family:\"Calibri\",sans-serif;'>Hello<br />";
+        msg += "bla bla</div>"
 
         var sender = sendgrid.SendGrid(process.env.SENDGRID_APIKEY);
         var helper = sendgrid.mail;
