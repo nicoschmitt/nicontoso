@@ -114,7 +114,7 @@
                                 }
                             }
                         });
-                        msg += "</div>";
+                        msg += "<p>Go to <a href='https://" + req.headers.host + "/#Mic'>MyMic</a></p></div>";
                         if (changed) {
                             SendMail(user, msg);
                         }
