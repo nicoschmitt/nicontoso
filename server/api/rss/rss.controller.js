@@ -138,6 +138,9 @@
                     }
                 }, this);
 
+                res.header('Cache-Control', 'public, max-age=86400');
+                res.removeHeader("Expires");
+                res.removeHeader("Pragma");
                 res.type("application/rss+xml").send(feed.xml());
             });
             
