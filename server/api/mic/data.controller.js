@@ -1,15 +1,9 @@
 (function(){
     var moment     = require("moment");
-    var Config     = require("../config/config.model");
     var MicData    = require("./data.model");
     var UpdateInfo = require("./info.model");
     var sendgrid   = require('sendgrid');
 
-    var micdomain = "";
-    Config.findOne({ }, { __v:0, _id:0 }).lean().exec(function(err, config) {
-        micdomain = config.micdomain;
-    });
-    
     function GetDataForUser(user, cb) {
         MicData.find({ user: user, fiscal: process.env.CURRENT_FISCAL }, { user:0, fiscal:0, _id: 0, __v: 0 }).sort("date").lean().exec(function(err, data) {
             if (data && data.length > 0) {
@@ -23,33 +17,29 @@
     }
   
     function SendMail(user, msg) {
-        Config.findOne({ }, { __v:0, _id:0 }).lean().exec(function(err, config) {
+        var sender = sendgrid.SendGrid(process.env.SENDGRID_APIKEY);
+        var helper = sendgrid.mail;
 
-            var sender = sendgrid.SendGrid(process.env.SENDGRID_APIKEY);
-            var helper = sendgrid.mail;
+        mail = new helper.Mail(
+            new helper.Email(process.env.EMAIL_SENT_FROM), 
+            "myMIC", 
+            new helper.Email(user + "@" + process.env.MIC_ACCESS_DOMAIN),  
+            new helper.Content("text/html", msg)
+        );
 
-            mail = new helper.Mail(
-                new helper.Email(process.env.EMAIL_SENT_FROM), 
-                "myMIC", 
-                new helper.Email(user + "@" + config.micdomain),  
-                new helper.Content("text/html", msg)
-            );
-
-            var emptyRequest = require('sendgrid-rest').request;
-            var requestPost = sender.emptyRequest();
-            requestPost.method = 'POST';
-            requestPost.path = '/v3/mail/send';
-            requestPost.body = mail.toJSON();
-            sender.API(requestPost, function (response) { 
-                //console.log(response);
-            });
-
+        var emptyRequest = require('sendgrid-rest').request;
+        var requestPost = sender.emptyRequest();
+        requestPost.method = 'POST';
+        requestPost.path = '/v3/mail/send';
+        requestPost.body = mail.toJSON();
+        sender.API(requestPost, function (response) { 
+            //console.log(response);
         });
     }
   
     module.exports.getcurrentdata = function(req, res) {
         var email = req.user.preferred_username;
-        if (!email.endsWith(micdomain)) return res.json({});
+        if (!email.endsWith(process.env.MIC_ACCESS_DOMAIN)) return res.json({});
         var user = email.substr(0, email.indexOf("@"));
         
         UpdateInfo.findOne({ user: user }, function(err, info) {
