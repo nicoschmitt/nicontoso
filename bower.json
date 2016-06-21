@@ -32,5 +32,8 @@
     "angular-aria": {
       "main": "angular-aria.min.js"
     }
+  },
+  "resolutions": {
+    "angular": "^1.5.7"
   }
 }
