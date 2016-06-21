@@ -9,6 +9,7 @@
     var cheerio = require('cheerio');
     var RSSVL = require("./rssvl.model");
     var entities = require("entities");
+    var moment = require("moment");
 
     module.exports.reddit = function(req, res) {
         var url = "http://www.reddit.com/.rss";
@@ -24,12 +25,38 @@
                     element.link[0]["$"].href = link;
                 }, this);
 
+                res.header('Cache-Control', 'public, max-age=360');
+                res.removeHeader("Expires");
+                res.removeHeader("Pragma");
                 res.type("application/atom+xml").send(builder.buildObject(rss));
             });
         });
     }
 
-    function findInCache(cache, type, lang) {
+    var vlcache = { when: null, data: [] };
+    function getVLCache(current, callback) {
+        if (vlcache.data.length > 0 && vlcache.when.isAfter(moment().subtract(1, "days"))) {
+            //console.log("local cache");
+            callback(null, vlcache.data);
+        } else {
+            RSSVL.find({ month: current }).lean().exec(function(err, cache) {
+                if (!err) { 
+                    if (cache != null) {
+                        //console.log("remote cache");
+                        vlcache = {
+                            when: moment(),
+                            data: cache
+                        };
+                    } else {
+                        //console.log("no cache");
+                    }
+                }
+                callback(err, cache);
+            });
+        }
+    }
+
+    function findInVLCache(cache, type, lang) {
         for(var i = 0; i < cache.length; i++) {
             if (cache[i].doctype == type && cache[i].language == lang) return cache[i];
         }
@@ -67,12 +94,12 @@
 
         var current = moment().format("MMMMYYYY");
        
-        RSSVL.find({ month: current }).lean().exec(function(err, cache) {
+        getVLCache(current, function(err, cache) {
             if (err) { console.log(err); return res.status(500).send(err); }
 
             async.map(all, function(item, cb) {
 
-                var elt = findInCache(cache, item[0], item[1]);
+                var elt = findInVLCache(cache, item[0], item[1]);
                 if (elt != null) {
                     return cb(null, {
                         id: elt.name,
