@@ -3,6 +3,7 @@
     var request = require("request");
     var qs = require("querystring");
     var async = require("async");
+    var moment = require("moment");
     
     function nice(route) {
         var chemin = route.response;
@@ -65,6 +66,7 @@
                  var result = data.alternatives.map(nice);
                  var better =  Math.min(...result.map(r => r.time));
                  res.json({
+                     currentTime: moment().toISOString(),
                      better: better,
                      routes: result
                  });

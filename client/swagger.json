@@ -40,6 +40,9 @@
                             "title": "TravelTime",
                             "type": "object",
                             "properties": {
+                                "currentTime": {
+                                    "type": "dateTime"
+                                },
                                 "better": {
                                	    "type": "integer"
                                 },
