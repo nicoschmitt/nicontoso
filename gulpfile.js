@@ -74,4 +74,4 @@ gulp.task("replace-html", function() {
                 .pipe(gulp.dest("client/"));
 });
 
-gulp.task("prod", [ "sass", "replace-html" ]);
+gulp.task("prod", [ "replace-html" ]);
