@@ -1,5 +1,6 @@
 {
     "swagger": "2.0",
+    "host": "www.nicontoso.eu",
     "info": {
         "version": "1.0.0",
         "title": "Travel Time",
@@ -12,6 +13,7 @@
         "/api/travel": {
             "get": {
                 "summary": "Travel Time",
+                "operationId": "getTravelTime",
                 "description": "Gets available routes and travel time\n",
                 "parameters": [
                     {
@@ -35,20 +37,27 @@
                     "200": {
                         "description": "Successful response",
                         "schema": {
-                            "title": "ArrayOfRoutes",
-                            "type": "array",
-                            "items": {
-                                "title": "Route",
-                                "type": "object",
-                                "properties": {
-                                    "name": {
-                                        "type": "string"
-                                    },
-                                    "time": {
-                                        "type": "number"
-                                    },
-                                    "dist": {
-                                        "type": "number"
+                            "title": "TravelTime",
+                            "type": "object",
+                            "properties": {
+                                "better": {
+                               	    "type": "integer"
+                                },
+                                "routes": {
+                                    "type": "array",
+                                    "items": {
+                                        "type": "object",
+                                        "properties": {
+                                            "name": {
+                                                "type": "string"
+                                            },
+                                            "time": {
+                                                "type": "integer"
+                                            },
+                                            "dist": {
+                                                "type": "integer"
+                                            }
+                                        }
                                     }
                                 }
                             }

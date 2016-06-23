@@ -63,7 +63,11 @@
              
              if (data.alternatives && data.alternatives.length > 0) {
                  var result = data.alternatives.map(nice);
-                 res.json(result);
+                 var better =  Math.min(...result.map(r => r.time));
+                 res.json({
+                     better: better,
+                     routes: result
+                 });
              }
         });
     }
