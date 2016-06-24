@@ -41,7 +41,8 @@
                             "type": "object",
                             "properties": {
                                 "currentTime": {
-                                    "type": "dateTime"
+                                    "type": "string",
+                                    "format": "date-time"
                                 },
                                 "better": {
                                	    "type": "integer"
@@ -50,6 +51,7 @@
                                     "type": "array",
                                     "items": {
                                         "type": "object",
+                                        "title": "route",
                                         "properties": {
                                             "name": {
                                                 "type": "string"
