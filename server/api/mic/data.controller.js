@@ -20,11 +20,15 @@
         var sender = sendgrid.SendGrid(process.env.SENDGRID_APIKEY);
         var helper = sendgrid.mail;
 
+        var fullmsg = "<div style='font-size:11.0pt;font-family:\"Calibri\",sans-serif;'>";
+        fullmsg += msg;
+        fullmsg += "<p>Go to <a href='https://" + req.headers.host + "/#Mic'>MyMic</a></p></div>";
+
         mail = new helper.Mail(
             new helper.Email(process.env.EMAIL_SENT_FROM), 
             "myMIC", 
             new helper.Email(user + "@" + process.env.MIC_ACCESS_DOMAIN),  
-            new helper.Content("text/html", msg)
+            new helper.Content("text/html", fullmsg)
         );
 
         var emptyRequest = require('sendgrid-rest').request;
@@ -93,19 +97,27 @@
             } else {
                 MicData.findOne({ user: user, fiscal: req.body.fiscal, quarter: req.body.quarter }).sort("-date").exec(function(err, doc) {
                     if (doc) {
-                        var changed = false;
-                        var msg = "<div style='font-size:11.0pt;font-family:\"Calibri\",sans-serif;'>";
-                        msg += "Something has changed for " + req.body.quarter + ".<br />\r\n";
+                        // Alert if quota changed
+                        var quotaChanged = false;
+                        var msg = "Something has changed for " + req.body.quarter + ".<br />\r\n";
                         Object.keys(req.body).forEach(k => {
                             if (k.toLowerCase().indexOf("target") >= 0) {
                                 if (doc[k] != req.body[k]) {
-                                    changed = true;
+                                    quotaChanged = true;
                                     msg += k + " is now " + req.body[k] + ". It was " + doc[k] + ".<br />\r\n";
                                 }
                             }
                         });
-                        msg += "<p>Go to <a href='https://" + req.headers.host + "/#Mic'>MyMic</a></p></div>";
-                        if (changed) {
+                        if (quotaChanged) {
+                            SendMail(user, msg);
+                        }
+
+                        // Alert if +5% in PG1 or PG2
+                        if (req.body["PG1"] - doc["PG1"] >= 5 || req.body["PG2"] - doc["PG2"] >= 5) {
+                            msg = "Big raised in attainment <br />\r\n";
+                            msg += "PG1 is now " + req.body["PG1"] + ", was " + doc["PG1"] + "<br />\r\n";
+                            msg += "PG2 is now " + req.body["PG2"] + ", was " + doc["PG2"] + "<br />\r\n";
+
                             SendMail(user, msg);
                         }
                     }
