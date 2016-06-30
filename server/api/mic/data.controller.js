@@ -16,13 +16,13 @@
         });
     }
   
-    function SendMail(user, msg) {
+    function SendMail(user, msg, host) {
         var sender = sendgrid.SendGrid(process.env.SENDGRID_APIKEY);
         var helper = sendgrid.mail;
 
         var fullmsg = "<div style='font-size:11.0pt;font-family:\"Calibri\",sans-serif;'>";
         fullmsg += msg;
-        fullmsg += "<p>Go to <a href='https://" + req.headers.host + "/#Mic'>MyMic</a></p></div>";
+        fullmsg += "<p>Go to <a href='https://" + host + "/#Mic'>MyMic</a></p></div>";
 
         mail = new helper.Mail(
             new helper.Email(process.env.EMAIL_SENT_FROM), 
@@ -109,7 +109,7 @@
                             }
                         });
                         if (quotaChanged) {
-                            SendMail(user, msg);
+                            SendMail(user, msg, req.headers.host);
                         }
 
                         // Alert if +5% in PG1 or PG2
@@ -118,7 +118,7 @@
                             msg += "  PG1 is now " + req.body["PG1"] + ", was " + doc["PG1"] + "<br />\r\n";
                             msg += "  PG2 is now " + req.body["PG2"] + ", was " + doc["PG2"] + "<br />\r\n";
 
-                            SendMail(user, msg);
+                            SendMail(user, msg, req.headers.host);
                         }
                     }
                    
