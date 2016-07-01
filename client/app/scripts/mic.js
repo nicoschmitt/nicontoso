@@ -6,7 +6,7 @@
         var quarter = "Q4";
         var month = moment().month();
         if (month < 3) quarter = "Q3";
-        else if (month < 6) quarter = "Q4";
+        else if (month < 7) quarter = "Q4"; // July is like Q4...
         else if (month < 9) quarter = "Q1";
         else quarter = "Q2";
         
