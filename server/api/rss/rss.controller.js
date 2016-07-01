@@ -116,7 +116,8 @@
                     if (err) return cb(err, null);
 
                     $ = cheerio.load(body);
-                    var doc = $("#dgDocuments_ctl03_lnkTitle");
+                    //var doc = $("#dgDocuments_ctl03_lnkTitle");
+                    var doc = $("#dgDocuments tr").last().find("td").first().find("a");
                     var name = doc.text();
                     var month = name.substring(name.lastIndexOf("(") + 1);
                     month = month.substring(0, month.indexOf(")"));
@@ -152,7 +153,7 @@
                 results.forEach(function(doc) {
                     if (doc != null) {
                         feed.item({
-                            title: doc.id,
+                            title: doc.title,
                             description: "See <a href='https://www.microsoft.com/en-us/licensing/product-licensing/products.aspx'>here</a>",
                             url: doc.url,
                             guid: doc.id,
@@ -168,7 +169,7 @@
                 res.header('Cache-Control', 'public, max-age=86400');
                 res.removeHeader("Expires");
                 res.removeHeader("Pragma");
-                res.type("application/rss+xml").send(feed.xml());
+                res.type("application/rss+xml").send(feed.xml({ indent: true }));
             });
             
         });
