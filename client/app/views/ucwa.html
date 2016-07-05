@@ -1,0 +1,14 @@
+<div layout-padding flex="grow" ng-hide="vm.isAuthenticated()">
+    <h3>Please <a href="#/Login">log in</a>.<h3>
+</div>
+
+<div layout="column" ng-if="vm.isAuthenticated()">
+    <div class="maincontent" ng-show="vm.loading">
+        <i class="fa fa-cog fa-spin fa-5x"></i>
+        <p>{{vm.message}}</p>
+    </div>
+    <div ng-hide="vm.loading" class="maincontent">
+        <p>Meeting created.</p>
+        <p><a ng-href="{{vm.joinUrl}}">{{vm.joinUrl}}</a></p>
+    </div>
+</div>
