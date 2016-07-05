@@ -13,6 +13,9 @@
     module.exports.start = function(app) {
         var server = {};
         var env = process.env.NODE_ENV || "development";
+
+        console.log(process.env.PORT + " | " + process.env.port);
+
         var port = process.env.PORT || 8080;
         if (env == "development") {
             console.log("Dev env, start HTTPS server");
