@@ -9,7 +9,7 @@
             vm.isAuthenticated = function() { return adal.userInfo.isAuthenticated }
             
             vm.micAccess = function() {
-                return vm.isAuthenticated() && adal.userInfo.userName.endsWith($config.micdomain);
+                return vm.isAuthenticated() && adal.userInfo.userName.endsWith("@" + $config.micdomain);
             }
 
             vm.login = function() {

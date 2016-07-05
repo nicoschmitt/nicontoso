@@ -18,7 +18,7 @@
     "angular-aria": "^1.5.7",
     "jquery": "^3.0.0",
     "moment": "^2.13.0",
-    "adal-angular-experimental": "adal-angular#2.0.0-experimental",
+    "adal-angular": "^1.0.10",
     "angular-chart.js": "1.0.0-alpha6",
     "Chart.js": "^2.1.6"
   },

@@ -15,6 +15,12 @@
                 controller: "micCtrl",
                 controllerAs: "vm"
 
+            }).when("/UCWA", {
+                requireADLogin: true,
+                templateUrl: "/app/views/ucwa.html",
+                controller: "ucwaCtrl",
+                controllerAs: "vm"
+
             }).when("/Login", {
                 requireADLogin: true,
                 redirectTo: "/Home"
@@ -23,7 +29,11 @@
             
             adalProvider.init({
                 tenant: "common",
-                clientId: $config.adalAppId
+                clientId: $config.adalAppId,
+                anonymousEndpoints: [ "/views", "/scripts", "/css", "/lib", "/api" ],
+                endpoints: {
+                    "https://webdir.online.lync.com": "https://webdir.online.lync.com"
+                }
             }, $httpProvider);
     }]);
    
