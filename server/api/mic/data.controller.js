@@ -42,8 +42,8 @@
     }
   
     module.exports.getcurrentdata = function(req, res) {
-        var email = req.user.preferred_username;
-        if (!email.endsWith(process.env.MIC_ACCESS_DOMAIN)) return res.json({});
+        var email = req.user.email;
+        if (!email.endsWith("@" + process.env.MIC_ACCESS_DOMAIN)) return res.json({});
         var user = email.substr(0, email.indexOf("@"));
         
         UpdateInfo.findOne({ user: user }, function(err, info) {
