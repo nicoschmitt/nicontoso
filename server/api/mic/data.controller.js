@@ -42,9 +42,7 @@
     }
   
     module.exports.getcurrentdata = function(req, res) {
-        console.log(req.user);
-        var email = req.user.email;
-        console.log(email);
+        var email = req.user.unique_name;
         if (!email.endsWith("@" + process.env.MIC_ACCESS_DOMAIN)) return res.json({});
         var user = email.substr(0, email.indexOf("@"));
         
