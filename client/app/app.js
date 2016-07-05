@@ -30,7 +30,7 @@
             adalProvider.init({
                 tenant: "common",
                 clientId: $config.adalAppId,
-                anonymousEndpoints: [ "/views", "/scripts", "/css", "/lib", "/api" ],
+                anonymousEndpoints: [ "/views", "/scripts", "/css", "/lib", "/api/config", "/api/tenant" ],
                 endpoints: {
                     "https://webdir.online.lync.com": "https://webdir.online.lync.com"
                 }
