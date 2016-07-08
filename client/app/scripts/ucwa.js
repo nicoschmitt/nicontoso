@@ -8,8 +8,8 @@
         return parser.protocol + "//" + parser.host;;
     }
 
-    function addToAdalEndpoints(url) {
-        var adalendpoints = AuthenticationContext.prototype._singletonInstance.config.endpoints;
+    function addToAdalEndpoints(adal, url) {
+        var adalendpoints = adal.config.endpoints;
         var endp = reduceUrlToHost(url);
         adalendpoints[endp] = endp;
     }
@@ -33,14 +33,14 @@
                 $http.get(url).then(function(response){
                     var userurl = response.data._links.user.href;
 
-                    addToAdalEndpoints(userurl);
+                    addToAdalEndpoints(adal, userurl);
 
                     $http.get(userurl).then(function(response){
 
                         if (response.data._links.hasOwnProperty("redirect")) return autoDiscover(response.data._links.redirect.href, callback);
                         
                         var appurl = response.data._links.applications.href;
-                        addToAdalEndpoints(appurl);
+                        addToAdalEndpoints(adal, appurl);
                         callback(appurl);
 
                     }, httpError);
