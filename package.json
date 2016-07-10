@@ -29,19 +29,19 @@
     "gulp-usemin": "^0.3.22",
     "gulp-util": "^3.0.7",
     "jwt-simple": "^0.5.0",
-    "moment": "^2.13.0",
-    "mongodb": "^2.1.21",
+    "moment": "^2.14.1",
+    "mongodb": "^2.2.0",
     "mongoose": "^4.5.3",
     "passport": "^0.3.2",
     "passport-azure-ad": "^1.4.4",
     "passport-strategy": "^1.0.0",
     "querystring": "^0.2.0",
-    "request": "^2.72.0",
+    "request": "^2.73.0",
     "rss": "^1.2.1",
-    "sendgrid": "^3.0.5",
+    "sendgrid": "^3.0.7",
     "shortid": "^2.2.6",
     "util": "^0.10.3",
-    "xml2js": "^0.4.16"
+    "xml2js": "^0.4.17"
   },
   "devDependencies": {}
 }
