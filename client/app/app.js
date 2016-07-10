@@ -1,5 +1,5 @@
 (function() {
-    var app = angular.module('myApp', [ 'ngRoute', "AdalAngular", "ngMaterial", "chart.js" ]);
+    var app = angular.module('myApp', [ 'ngRoute', "AdalAngular", "ngMaterial", "chart.js", 'angulartics', 'angulartics.google.analytics' ]);
   
     app.config(["$config", '$routeProvider', '$httpProvider', "adalAuthenticationServiceProvider",
         function ($config, $routeProvider, $httpProvider, adalProvider) {

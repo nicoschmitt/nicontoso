@@ -20,7 +20,8 @@
     "moment": "^2.13.0",
     "adal-angular": "^1.0.10",
     "angular-chart.js": "1.0.0-alpha6",
-    "Chart.js": "^2.1.6"
+    "Chart.js": "^2.1.6",
+    "angulartics-google-analytics": "^0.2.0"
   },
   "overrides": {
     "angular-material": {

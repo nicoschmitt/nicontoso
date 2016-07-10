@@ -2,8 +2,8 @@
     
     var app = angular.module('myApp');
   
-    app.controller('topNavCtrl', ["$config", "$rootScope", "$location", 'adalAuthenticationService', "$http", 
-        function ($config, $rootScope, $location, adal, $http) {
+    app.controller('topNavCtrl', ["$config", "$scope", "$location", 'adalAuthenticationService', "$http", 
+        function ($config, $scope, $location, adal, $http) {
             var vm = this;
             
             vm.isAuthenticated = function() { return adal.userInfo.isAuthenticated }
@@ -30,10 +30,21 @@
                 var auth = adal.userInfo.isAuthenticated;
                 return (auth && adal.userInfo.profile.name) || "";
             };
+
+            vm.getUserMail = function() {
+                var auth = adal.userInfo.isAuthenticated;
+                return (auth && adal.userInfo.userName) || "";
+            };
             
             vm.isActive = function(viewLocation) { 
                 return viewLocation === $location.path();
             };
+
+            $scope.$on("adal:loginSuccess", function () {
+                console.log("login success");
+                console.log(adal.userInfo.profile.name);
+            });
+
         }
     ]);
   

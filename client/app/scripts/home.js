@@ -2,8 +2,8 @@
     
     var app = angular.module('myApp');
   
-    app.controller('homeCtrl', ['$http', "$location", "adalAuthenticationService",
-        function ($http, $location, adal) {
+    app.controller('homeCtrl', ['$http', "$location", "adalAuthenticationService", "$analytics",
+        function ($http, $location, adal, $analytics) {
             var vm = this;
             
             vm.isAuthenticated = function() { return adal.userInfo.isAuthenticated }
@@ -21,6 +21,7 @@
             
             vm.checkTenant = function() {
                 vm.name = vm.name.trim();
+                $analytics.eventTrack('tenant');
                 if (vm.name.match(/\W/)) {
                     vm.checked.unshift({
                         name: vm.name + " (invalid)",
