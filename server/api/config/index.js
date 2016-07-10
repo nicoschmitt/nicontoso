@@ -19,7 +19,8 @@
         res.json({ 
             env: process.env.NODE_ENV,
             adalAppId: process.env.MS_APP_ID,
-            micdomain: process.env.MIC_ACCESS_DOMAIN
+            micdomain: process.env.MIC_ACCESS_DOMAIN,
+            analytics: process.env.GOOGLE_ANALYTICS
         });
     };
     
