@@ -71,7 +71,7 @@ gulp.task("replace-html", function() {
                         uglify()
                     ],
                     libjs: [
-                        uglify()
+                        uglify({ mangle: false, compress: false })
                     ]
                 }))
                 .pipe(gulp.dest("client/"));
