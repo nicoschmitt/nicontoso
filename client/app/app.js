@@ -44,8 +44,8 @@
         var $http = initInjector.get("$http");
         return $http.get("/api/config").then(function(resp){
             app.constant("$config", resp.data);
-            // start analytics
-            ga('create', resp.data.analytics, 'auto');
+            // start google analytics
+            if (ga) ga('create', resp.data.analytics, 'auto');
         });
     };
 
