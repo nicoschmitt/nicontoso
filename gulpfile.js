@@ -69,6 +69,9 @@ gulp.task("replace-html", function() {
                     js: [
                         babel({ presets: ['es2015'] }),
                         uglify()
+                    ],
+                    libjs: [
+                        uglify()
                     ]
                 }))
                 .pipe(gulp.dest("client/"));
