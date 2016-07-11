@@ -99,8 +99,6 @@ a {
 
 // ---- MIC ----
 
-// ---- Home ----
-
 .tabcontent {
     margin-top: 20px;
     margin-bottom: 20px;
@@ -111,7 +109,10 @@ a {
     
     .togo {
         font-size: 0.6em;
-    }
+
+        .ok { color: $green }
+        .ko { color: $red }
+    } 
 }
 
 .updated {

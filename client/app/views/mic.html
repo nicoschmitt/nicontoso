@@ -22,7 +22,9 @@
                                     <span class="md-headline">PG1</span>
                                     <div layout="column" layout-align="center start" class="kpi md-display-1">
                                         <span>{{quarter.current.PG1}}%</span>
-                                        <span class="togo">Togo: ${{quarter.current.nicePG1Togo}}</span>
+                                        <span class="togo">Togo: 
+                                            <span ng-class="{ok: quarter.current.PG1Togo<=0, ko:quarter.current.PG1Togo>0}">${{quarter.current.nicePG1Togo}}</span>
+                                        </span>
                                     </div>
                                 </md-card-title-text>
                             </md-card-title>
@@ -33,7 +35,9 @@
                                     <span class="md-headline">PG2</span>
                                     <div layout="column" layout-align="center start" class="kpi md-display-1">
                                         <span>{{quarter.current.PG2}}%</span>
-                                        <span class="togo">Togo: ${{quarter.current.nicePG2Togo}}</span>
+                                        <span class="togo">Togo: 
+                                            <span ng-class="{ok: quarter.current.PG1Togo<=0, ko:quarter.current.PG1Togo>0}">${{quarter.current.nicePG2Togo}}</span>
+                                        </span>
                                     </div>
                                 </md-card-title-text>
                             </md-card-title>
