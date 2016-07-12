@@ -116,9 +116,14 @@
                     if (err) return cb(err, null);
 
                     $ = cheerio.load(body);
-                    //var doc = $("#dgDocuments_ctl03_lnkTitle");
                     var doc = $("#dgDocuments tr").last().find("td").first().find("a");
                     var name = doc.text();
+
+                    if (name == "Title") {
+                        doc = $("#dgDocumentsArchived tr").eq(1).find("td").first().find("a");
+                        name = doc.text();
+                    }
+
                     var month = name.substring(name.lastIndexOf("(") + 1);
                     month = month.substring(0, month.indexOf(")"));
                 

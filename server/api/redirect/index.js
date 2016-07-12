@@ -4,7 +4,9 @@
     var router = express.Router();
     
     var redirect = function(req, res) {
-        return res.redirect(req.url.substring(1));
+        var url = req.url.substring(1);
+        console.log(url);
+        return res.redirect(url);
     };
     
     router.get('/*', redirect);
