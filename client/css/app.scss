@@ -3,11 +3,11 @@ $white: #eee;
 $red: #d51b1b;
 $green: green;
 
-html, body {
+html, body, .mainborder {
     background-color: $black;
 }
 
-body {
+.mainborder {
     padding: 20px;
 }
 
