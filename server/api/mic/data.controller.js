@@ -4,8 +4,8 @@
     var UpdateInfo = require("./info.model");
     var sendgrid   = require('sendgrid');
 
-    function GetDataForUser(user, cb) {
-        MicData.find({ user: user, fiscal: process.env.CURRENT_FISCAL }, { user:0, fiscal:0, _id: 0, __v: 0 }).sort("date").lean().exec(function(err, data) {
+    function GetDataForUser(user, fiscal, cb) {
+        MicData.find({ user: user, fiscal: fiscal }, { user:0, fiscal:0, _id: 0, __v: 0 }).sort("date").lean().exec(function(err, data) {
             if (data && data.length > 0) {
                 var latest = data[data.length - 1].date.getTime();
                 data.forEach(d => {
@@ -45,9 +45,11 @@
         var email = req.user.unique_name;
         if (!email.endsWith("@" + process.env.MIC_ACCESS_DOMAIN)) return res.json({});
         var user = email.substr(0, email.indexOf("@"));
+
+        var fiscal = req.query.fiscal || process.env.CURRENT_FISCAL;
         
         UpdateInfo.findOne({ user: user }, function(err, info) {
-            GetDataForUser(user, function(data) {
+            GetDataForUser(user, fiscal, function(data) {
                 res.json({
                     lastupdated: info.when,
                     data: data
@@ -60,6 +62,7 @@
         var user = req.params.user;
         var quarter = req.query.quarter;
         var full = req.query.full;
+        var fiscal = req.query.fiscal || process.env.CURRENT_FISCAL;
         
         if (!quarter) {
             var month = moment().month();
@@ -70,11 +73,11 @@
         }
 
         if (full) {
-            GetDataForUser(user, function(data) {
+            GetDataForUser(user, fiscal, function(data) {
                 return res.json(data);
             });
         } else {
-            var search = { user: user, fiscal: process.env.CURRENT_FISCAL, quarter: quarter };
+            var search = { user: user, fiscal: fiscal, quarter: quarter };
             MicData.findOne(search, { user:0, fiscal:0, _id: 0, __v: 0 }).sort("-date").exec(function(err, data) {
                 return res.json(data);
             });

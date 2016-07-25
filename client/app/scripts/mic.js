@@ -47,10 +47,12 @@
         return (amount / 1000).toFixed(0).replace(/(\d)(?=(\d{3})+$)/g, "$1 ") + "k";
     }
   
-    app.controller('micCtrl', ['$http', "$location", "adalAuthenticationService",
-        function ($http, $location, adal) {
+    app.controller('micCtrl', ['$http', "$location", "$routeParams", "adalAuthenticationService",
+        function ($http, $location, $routeParams, adal) {
             var vm = this;
             
+            console.log($routeParams.fiscal);
+
             vm.isAuthenticated = function() { return adal.userInfo.isAuthenticated }
             
             vm.loading = true;
@@ -85,13 +87,16 @@
             }
             
             var view = function() {
-                $http.get("/api/mic").then(function(resp) {
+                var url = "/api/mic";
+                if ($routeParams.fiscal) url += "?fiscal=" + $routeParams.fiscal;
+                $http.get(url).then(function(resp) {
                     vm.loading = false;
                     
                     if (!resp.data.lastupdated) return;
                     
                     vm.updated = moment(resp.data.lastupdated).fromNow();
                     var data = resp.data.data;
+                    if (!data || data.length == 0) return;
                     
                     var byQuarter = { Q1: [], Q2: [], Q3: [], Q4: [] };
                     data.reduce((prev, current) => {
