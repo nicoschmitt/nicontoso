@@ -7,6 +7,7 @@
     var controller = require('./data.controller');
     
     router.get("/", passport.authenticate('oauth-bearer', { session: false }), controller.getcurrentdata);
+    router.get('/testemail', passport.authenticate('simple'), controller.testemail);
     router.put('/:user', passport.authenticate('simple'), controller.putdata);
     router.get('/:user', passport.authenticate('simple'), controller.getdata);
 

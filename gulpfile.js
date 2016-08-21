@@ -25,7 +25,7 @@ gulp.task("watch-sass", function() {
    gulp.watch('client/css/*.scss', ['sass']); 
 });
 
-gulp.task("watch", [ "watch-sass" ]);
+gulp.task("watch", [ "sass", "watch-sass" ]);
 
 // Dev
 
@@ -77,4 +77,4 @@ gulp.task("replace-html", function() {
                 .pipe(gulp.dest("client/"));
 });
 
-gulp.task("prod", [ "replace-html" ]);
+gulp.task("prod", [ "sass", "replace-html" ]);

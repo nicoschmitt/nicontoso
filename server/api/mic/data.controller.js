@@ -16,9 +16,11 @@
         });
     }
   
-    function SendMail(user, msg, host) {
-        var sender = sendgrid.SendGrid(process.env.SENDGRID_APIKEY);
+    function SendMail(user, msg, host, callback) {
+        var sender = sendgrid(process.env.SENDGRID_APIKEY);
         var helper = sendgrid.mail;
+
+        if (user.indexOf("@") < 0) user += "@" + process.env.MIC_ACCESS_DOMAIN;
 
         var fullmsg = "<div style='font-size:11.0pt;font-family:\"Calibri\",sans-serif;'>";
         fullmsg += msg;
@@ -27,7 +29,7 @@
         mail = new helper.Mail(
             new helper.Email(process.env.EMAIL_SENT_FROM), 
             "myMIC", 
-            new helper.Email(user + "@" + process.env.MIC_ACCESS_DOMAIN),  
+            new helper.Email(user),  
             new helper.Content("text/html", fullmsg)
         );
 
@@ -36,8 +38,9 @@
         requestPost.method = 'POST';
         requestPost.path = '/v3/mail/send';
         requestPost.body = mail.toJSON();
-        sender.API(requestPost, function (response) { 
-            //console.log(response);
+        sender.API(requestPost, function (err, response) { 
+            if (err) { console.log("error"); console.log(err); }
+            callback(err, response);
         });
     }
   
@@ -112,7 +115,7 @@
                             }
                         });
                         if (quotaChanged) {
-                            SendMail(user, msg, req.headers.host);
+                            SendMail(user, msg, req.headers.host, () => {});
                         }
 
                         // Alert if +5% in PG1 or PG2
@@ -121,7 +124,7 @@
                             msg += "  PG1 is now " + req.body["PG1"] + ", was " + doc["PG1"] + "<br />\r\n";
                             msg += "  PG2 is now " + req.body["PG2"] + ", was " + doc["PG2"] + "<br />\r\n";
 
-                            SendMail(user, msg, req.headers.host);
+                            SendMail(user, msg, req.headers.host, () => {});
                         }
                     }
                    
@@ -143,4 +146,12 @@
             }
         });
     };
+
+    module.exports.testemail = function(req, res) {
+        // console.log("Test email");
+        // SendMail("", "Test email.", "localhost", () => {
+        //     
+        // }); 
+        return res.json({});  
+    }
 }());
