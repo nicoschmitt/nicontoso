@@ -27,7 +27,8 @@
                     xAxes: [{
                         type: "time",
                         time: {
-                            format: "MM/DD/YYYY",
+                            displayFormats: { day: "MM/DD/YYYY" },
+                            unit: 'day',
                             round: 'day',
                             tooltipFormat: 'll'
                         }
@@ -51,10 +52,8 @@
         function ($http, $location, $routeParams, adal) {
             var vm = this;
             
-            console.log($routeParams.fiscal);
-
             vm.isAuthenticated = function() { return adal.userInfo.isAuthenticated }
-            
+
             vm.loading = true;
             vm.message = "";
             vm.quarters = [];
@@ -95,13 +94,18 @@
                     if (!resp.data.lastupdated) return;
                     
                     vm.updated = moment(resp.data.lastupdated).fromNow();
+                    console.log("updated " + vm.updated);
+
                     var data = resp.data.data;
                     if (!data || data.length == 0) return;
                     
                     var byQuarter = { Q1: [], Q2: [], Q3: [], Q4: [] };
                     data.reduce((prev, current) => {
-                        byQuarter[current.quarter].push(current);   
-                    });
+                        console.log(current);
+                        byQuarter[current.quarter].push(current);
+                    }, {});
+
+                    console.log(byQuarter);
                     
                     for(var q in byQuarter) {
                         if (byQuarter[q].length > 0) {
@@ -112,7 +116,7 @@
                                 hist: GetChartData(byQuarter[q], q)
                             };
                             
-                            q.current.globalAttainment = ((30*q.current.PG1 + 35*q.current.PG2 + 5*q.current.CRM + 20*q.current.Usage + 10*q.current.Voice)/100).toFixed(0);
+                            q.current.globalAttainment = ((50*q.current.PG1 + 20*q.current.PG2 + 20*q.current.Usage + 10*q.current.EMSUsage)/100).toFixed(0);
                             q.current.nicePG1Togo = formatCurrency(q.current.PG1Togo);
                             q.current.nicePG2Togo = formatCurrency(q.current.PG2Togo);
                             
