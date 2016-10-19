@@ -27,12 +27,19 @@
         
         Usage: Number,
         UsageTarget: Number,
+        UsageActuals: Number,
+        UsageTogo: Number,
+
+        EMSUsage: Number,
+        EMSUsageTarget: Number,
+        EMSUsageActuals: Number,
+        EMSUsageTogo: Number
         
-        CRM: Number,
-        CRMTarget: Number,
+        // CRM: Number,
+        // CRMTarget: Number,
         
-        Voice: Number,
-        VoiceTarget: Number
+        // Voice: Number,
+        // VoiceTarget: Number
     })
         
     module.exports = mongoose.model("MicData", dataSchema);

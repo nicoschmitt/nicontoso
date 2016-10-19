@@ -13,6 +13,7 @@ var path = require('path');
 var compression = require("compression");
 
 var mongoose = require("mongoose");
+mongoose.Promise = global.Promise;
 mongoose.connect(mongo);
 
 var express = require('express');
