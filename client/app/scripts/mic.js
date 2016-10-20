@@ -18,8 +18,12 @@
                 tooltips: {
                     callbacks: {
                         label: function(o, context) { 
-                            var value = "$" + (o.yLabel * 1000).toFixed(0).replace(/(\d)(?=(\d{3})+$)/g, "$1 ");
-                            return context.datasets[o.datasetIndex].label + ": " + value; 
+                            if (context.datasets[o.datasetIndex].label.indexOf("Usage") < 0) {
+                                var value = "$" + (o.yLabel * 1000).toFixed(0).replace(/(\d)(?=(\d{3})+$)/g, "$1 ");
+                                return context.datasets[o.datasetIndex].label + ": " + value; 
+                            } else {
+                                return context.datasets[o.datasetIndex].label + ": " + o.yLabel; 
+                            }
                         }  
                     }
                 },
@@ -34,11 +38,24 @@
                         }
                     }],
                     yAxes: [{
+                        id: "revenue",
                         type: "linear",
                         ticks: {
                             min: 0,
                             callback: function(value) { return (value / 1000).toFixed(1).replace(/(\d)(?=(\d{3})+$)/g, "$1 ") + "M$"; }
-                        }
+                        },
+                        position: "left",
+                        display: true
+                    },
+                    {
+                        id: "units",
+                        type: "linear",
+                        ticks: {
+                            min: 0,
+                            callback: function(value) { return value; }
+                        },
+                        position: "right",
+                        display: true
                     }]
                 }
             };
@@ -59,6 +76,16 @@
             vm.quarters = [];
             vm.updated = "";
             vm.chartoptions = getChartOptions();
+            vm.datasetOverride = [
+                { yAxisID: 'revenue' },
+                { yAxisID: 'revenue' },
+                { yAxisID: 'revenue' },
+                { yAxisID: 'revenue' },
+                { yAxisID: 'units' },
+                { yAxisID: 'units' },
+                { yAxisID: 'units' },
+                { yAxisID: 'units' }
+            ];
             vm.selectedTab = 0;
             
             var handleError = function(resp) {
@@ -71,16 +98,24 @@
                 return {
                     labels: data.map(d => { return moment(d.date).toDate(); }),
                     series: [ 
-                        "Target PG2", 
-                        "Actuals PG2", 
                         "Target PG1", 
-                        "Actuals PG1"
+                        "Actuals PG1",
+                        "Target PG2", 
+                        "Actuals PG2",
+                        "Target Usage 365",
+                        "Actuals Usage 365",
+                        "Target Usage EMS",
+                        "Actuals Usage EMS"
                     ],
                     data: [
+                       data.map(d => { return d.PG1Target/1000; }),
+                       data.map(d => { return d.PG1Actuals/1000; }),
                        data.map(d => { return d.PG2Target/1000; }),
                        data.map(d => { return d.PG2Actuals/1000; }),
-                       data.map(d => { return d.PG1Target/1000; }),
-                       data.map(d => { return d.PG1Actuals/1000; })
+                       data.map(d => { return d.UsageTarget; }),
+                       data.map(d => { return d.UsageActuals; }),
+                       data.map(d => { return d.EMSUsageTarget; }),
+                       data.map(d => { return d.EMSUsageActuals; })
                     ]   
                 };
             }
@@ -101,11 +136,8 @@
                     
                     var byQuarter = { Q1: [], Q2: [], Q3: [], Q4: [] };
                     data.reduce((prev, current) => {
-                        console.log(current);
                         byQuarter[current.quarter].push(current);
                     }, {});
-
-                    console.log(byQuarter);
                     
                     for(var q in byQuarter) {
                         if (byQuarter[q].length > 0) {

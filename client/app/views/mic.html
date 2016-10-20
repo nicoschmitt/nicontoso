@@ -16,7 +16,7 @@
             <md-tab ng-repeat="quarter in vm.quarters" label="{{quarter.name}}">
                 <div class='tabcontent' layout="column" layout-align="start stretch">
                     <div layout="row" layout-xs="column">
-                        <md-card flex-gt-xs="33">
+                        <md-card flex-gt-xs="25">
                             <md-card-title>
                                 <md-card-title-text>
                                     <span class="md-headline">PG1</span>
@@ -29,7 +29,7 @@
                                 </md-card-title-text>
                             </md-card-title>
                         </md-card>
-                        <md-card flex-gt-xs="33">
+                        <md-card flex-gt-xs="25">
                             <md-card-title>
                                 <md-card-title-text>
                                     <span class="md-headline">PG2</span>
@@ -42,7 +42,24 @@
                                 </md-card-title-text>
                             </md-card-title>
                         </md-card>
-                        <md-card flex-gt-xs="33">
+                        <md-card flex-gt-xs="25">
+                            <md-card-title>
+                                <md-card-title-text>
+                                    <span class="md-headline">Usage</span>
+                                    <div layout="column" layout-align="center start" class="kpi md-display-1">
+                                        <span class="small md-body-2">O365: {{quarter.current.Usage}}%</span>
+                                        <span class="togo">Togo: 
+                                            <span ng-class="{ok: quarter.current.UsageTogo<=0, ko:quarter.current.UsageTogo>0}">{{quarter.current.UsageTogo}}</span>
+                                        </span>
+                                        <span class="small md-body-2">EMS: {{quarter.current.EMSUsage}}%</span>
+                                        <span class="togo">Togo: 
+                                            <span ng-class="{ok: quarter.current.EMSUsageTogo<=0, ko:quarter.current.EMSUsageTogo>0}">{{quarter.current.EMSUsageTogo}}</span>
+                                        </span>
+                                    </div>
+                                </md-card-title-text>
+                            </md-card-title>
+                        </md-card>
+                        <md-card flex-gt-xs="25">
                             <md-card-title>
                                 <md-card-title-text>
                                     <span class="md-headline">Global</span>
@@ -59,6 +76,7 @@
                                 chart-labels="quarter.hist.labels"
                                 chart-data="quarter.hist.data" 
                                 chart-options="vm.chartoptions"
+                                chart-dataset-override="vm.datasetOverride"
                                 chart-legend="false">
                         </canvas>
                     </div>
