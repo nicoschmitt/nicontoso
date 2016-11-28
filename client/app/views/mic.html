@@ -31,6 +31,7 @@
                             </md-card-title>
                         </md-card>
                         <md-card flex-gt-xs="25">
+                            <md-checkbox ng-model="quarter.showgraph.pg2" aria-label="PG2"></md-checkbox>
                             <md-card-title>
                                 <md-card-title-text>
                                     <span class="md-headline">PG2</span>
@@ -44,6 +45,7 @@
                             </md-card-title>
                         </md-card>
                         <md-card flex-gt-xs="25">
+                            <md-checkbox ng-model="quarter.showgraph.usage" aria-label="Usage"></md-checkbox>
                             <md-card-title>
                                 <md-card-title-text>
                                     <span class="md-headline">Usage</span>
@@ -73,11 +75,11 @@
                     </div>
                     <div class="chart-container">
                         <canvas class="chart chart-line chart-xs ng-isolate-scope" 
-                                chart-series="quarter.hist.series"
-                                chart-labels="quarter.hist.labels"
-                                chart-data="quarter.hist.data" 
+                                chart-series="quarter.hist.getSeries(quarter.showgraph)"
+                                chart-labels="quarter.hist.getLabels(quarter.showgraph)"
+                                chart-data="quarter.hist.getData(quarter.showgraph)" 
                                 chart-options="vm.chartoptions"
-                                chart-dataset-override="vm.datasetOverride"
+                                chart-dataset-override="vm.getDatasetOverride(quarter.showgraph)"
                                 chart-legend="false">
                         </canvas>
                     </div>
