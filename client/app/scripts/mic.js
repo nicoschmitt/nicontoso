@@ -14,55 +14,56 @@
     }
     
     function getChartOptions() {
-        return {
-                tooltips: {
-                    callbacks: {
-                        label: function(o, context) { 
-                            if (context.datasets[o.datasetIndex].label.indexOf("Usage") < 0) {
-                                var value = "$" + (o.yLabel * 1000).toFixed(0).replace(/(\d)(?=(\d{3})+$)/g, "$1 ");
-                                return context.datasets[o.datasetIndex].label + ": " + value; 
-                            } else {
-                                return context.datasets[o.datasetIndex].label + ": " + o.yLabel; 
-                            }
-                        }  
-                    }
-                },
-                scales: {
-                    xAxes: [{
-                        type: "time",
-                        time: {
-                            displayFormats: { day: "MM/DD/YYYY" },
-                            unit: 'day',
-                            round: 'day',
-                            tooltipFormat: 'll'
+        var options = {
+            tooltips: {
+                callbacks: {
+                    label: function(o, context) { 
+                        if (context.datasets[o.datasetIndex].label.indexOf("Usage") < 0) {
+                            var value = "$" + (o.yLabel * 1000).toFixed(0).replace(/(\d)(?=(\d{3})+$)/g, "$1 ");
+                            return context.datasets[o.datasetIndex].label + ": " + value; 
+                        } else {
+                            return context.datasets[o.datasetIndex].label + ": " + o.yLabel; 
                         }
-                    }],
-                    yAxes: [{
-                        id: "revenue",
-                        type: "linear",
-                        ticks: {
-                            min: 0,
-                            callback: function(value) { return (value / 1000).toFixed(1).replace(/(\d)(?=(\d{3})+$)/g, "$1 ") + "M$"; }
-                        },
-                        position: "left",
-                        display: true
-                    },
-                    {
-                        id: "units",
-                        type: "linear",
-                        ticks: {
-                            min: 0,
-                            callback: function(value) { return value; }
-                        },
-                        position: "right",
-                        display: true
-                    }]
+                    }  
                 }
-            };
-    }
+            },
+            scales: {
+                xAxes: [{
+                    type: "time",
+                    time: {
+                        displayFormats: { day: "MM/DD/YYYY" },
+                        unit: 'day',
+                        round: 'day',
+                        tooltipFormat: 'll'
+                    }
+                }],
+                yAxes: [{
+                    id: "revenue",
+                    type: "linear",
+                    ticks: {
+                        min: 0,
+                        callback: function(value) { return (value / 1000).toFixed(1).replace(/(\d)(?=(\d{3})+$)/g, "$1 ") + "M$"; } //
+                    },
+                    position: "left",
+                    display: true
+                },
+                {
+                    id: "units",
+                    type: "linear",
+                    ticks: {
+                        min: 0,
+                        callback: function(value) { return value; }
+                    },
+                    position: "right",
+                    display: true
+                }]
+            }
+        };
+        return options;
+}
     
     function formatCurrency(amount) {
-        return (amount / 1000).toFixed(0).replace(/(\d)(?=(\d{3})+$)/g, "$1 ") + "k";
+        return (amount / 1000).toFixed(0).replace(/(\d)(?=(\d{3})+$)/g, "$1 ") + "k"; //
     }
   
     app.controller('micCtrl', ['$http', "$location", "$routeParams", "adalAuthenticationService",
