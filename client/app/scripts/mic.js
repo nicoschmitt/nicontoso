@@ -14,7 +14,7 @@
     }
     
     function getChartOptions() {
-        var options = {
+        return {
             tooltips: {
                 callbacks: {
                     label: function(o, context) { 
@@ -59,7 +59,6 @@
                 }]
             }
         };
-        return options;
 }
     
     function formatCurrency(amount) {
@@ -78,8 +77,7 @@
             vm.updated = "";
             vm.chartoptions = getChartOptions();
 
-            vm.getDatasetOverride = function(show) {
-                var axis = [
+            vm.datasetOverride = [
                     { yAxisID: 'revenue' },
                     { yAxisID: 'revenue' },
                     { yAxisID: 'revenue' },
@@ -89,8 +87,6 @@
                     { yAxisID: 'units' },
                     { yAxisID: 'units' }
                 ];
-                return axis.filter((e, i) => show[i]);
-            }
 
             vm.selectedTab = 0;
             
@@ -101,15 +97,9 @@
             };
             
             function GetChartData(data, quarter) {
-                var show = [ quarter.showgraph.pg1, quarter.showgraph.pg1, 
-                             quarter.showgraph.pg2, quarter.showgraph.pg2, 
-                             quarter.showgraph.usage, quarter.showgraph.usage, quarter.showgraph.usage, quarter.showgraph.usage ];
-                var chartdata = {
-                    getLabels: function(show) {
-                        return data.map(d => { return moment(d.date).toDate(); }).filter((e, i) => show[i]);
-                    },
-                    getSeries: function(show) {
-                        return [ 
+                return {
+                    labels: data.map(d => { return moment(d.date).toDate(); }),
+                    series: [ 
                             "Target PG1", 
                             "Actuals PG1",
                             "Target PG2", 
@@ -118,10 +108,8 @@
                             "Actuals Usage 365",
                             "Target Usage EMS",
                             "Actuals Usage EMS"
-                        ].filter((e, i) => show[i]);
-                    },
-                    getData: function(show) {
-                        return [
+                        ],
+                    data: [
                             data.map(d => { return d.PG1Target/1000; }),
                             data.map(d => { return d.PG1Actuals/1000; }),
                             data.map(d => { return d.PG2Target/1000; }),
@@ -130,10 +118,16 @@
                             data.map(d => { return d.UsageActuals; }),
                             data.map(d => { return d.EMSUsageTarget; }),
                             data.map(d => { return d.EMSUsageActuals; })
-                        ].filter((e, i) => show[i]);
-                    }
+                        ]
                 };
-                return chartdata;
+            }
+
+            vm.filterGraph = function() {
+                var quarter = vm.quarters[vm.selectedTab];
+                var show = [ quarter.showgraph.pg1, quarter.showgraph.pg1, 
+                             quarter.showgraph.pg2, quarter.showgraph.pg2, 
+                             quarter.showgraph.usage, quarter.showgraph.usage, quarter.showgraph.usage, quarter.showgraph.usage ];
+                console.log(show);
             }
             
             var view = function() {
