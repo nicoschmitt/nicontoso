@@ -124,6 +124,16 @@ a {
     margin-bottom: 40px;
 }
 
+md-card {
+    position: relative;
+
+    md-checkbox {
+        position: absolute;
+        top: 0.4em;
+        right: 0em;
+    }
+}
+
 // ----Alert ----
 
 .alert {
