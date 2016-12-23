@@ -16,8 +16,10 @@
 
         // real application
         var app = angular.module('myApp', [ 'ngRoute', "AdalAngular", "ngMaterial", "chart.js", 'angulartics', 'angulartics.google.analytics' ]);
-        app.config(["$config", '$routeProvider', '$httpProvider', "adalAuthenticationServiceProvider",
-            function ($config, $routeProvider, $httpProvider, adalProvider) {
+        app.config(["$config", '$routeProvider', '$httpProvider', "adalAuthenticationServiceProvider", "$locationProvider",
+            function ($config, $routeProvider, $httpProvider, adalProvider, $locationProvider) {
+
+                $locationProvider.hashPrefix('');
 
                 $routeProvider.when("/Home", {
                     templateUrl: "/app/views/home.html",
@@ -41,7 +43,7 @@
                     redirectTo: "/Home"
 
                 }).otherwise({ redirectTo: "/Home" });
-                
+
                 adalProvider.init({
                     tenant: "common",
                     clientId: $config.adalAppId,

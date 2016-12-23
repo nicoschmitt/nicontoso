@@ -5,7 +5,7 @@
     app.controller('topNavCtrl', ["$config", "$scope", "$location", 'adalAuthenticationService', "$http", "$analytics",
         function ($config, $scope, $location, adal, $http, $analytics) {
             var vm = this;
-            
+
             vm.isAuthenticated = function() { return adal.userInfo.isAuthenticated }
             
             vm.micAccess = function() {
