@@ -15,6 +15,7 @@
             "validateIssuer": false,
             "loggingLevel": "error"
         }, function (token, done) {
+            console.log(token);
             return done(null, token, null);
         }));
     }
