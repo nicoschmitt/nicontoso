@@ -32,7 +32,6 @@
                     type: "time",
                     time: {
                         displayFormats: { day: "MM/DD/YYYY" },
-                        unit: 'day',
                         round: 'day',
                         tooltipFormat: 'll'
                     }
@@ -52,7 +51,7 @@
                     type: "linear",
                     ticks: {
                         min: 0,
-                        callback: function(value) { return value; }
+                        callback: function(value) { return  (value / 1000).toFixed(0).replace(/(\d)(?=(\d{3})+$)/g, "$1 ") + "k"; } //
                     },
                     position: "right",
                     display: true
