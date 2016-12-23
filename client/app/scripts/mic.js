@@ -76,18 +76,6 @@
             vm.quarters = [];
             vm.updated = "";
             vm.chartoptions = getChartOptions();
-
-            vm.datasetOverride = [
-                    { yAxisID: 'revenue' },
-                    { yAxisID: 'revenue' },
-                    { yAxisID: 'revenue' },
-                    { yAxisID: 'revenue' },
-                    { yAxisID: 'units' },
-                    { yAxisID: 'units' },
-                    { yAxisID: 'units' },
-                    { yAxisID: 'units' }
-                ];
-
             vm.selectedTab = 0;
             
             var handleError = function(resp) {
@@ -118,6 +106,16 @@
                             data.map(d => { return d.UsageActuals; }),
                             data.map(d => { return d.EMSUsageTarget; }),
                             data.map(d => { return d.EMSUsageActuals; })
+                        ],
+                    datasetOverride: [
+                            { yAxisID: 'revenue' },
+                            { yAxisID: 'revenue' },
+                            { yAxisID: 'revenue' },
+                            { yAxisID: 'revenue' },
+                            { yAxisID: 'units' },
+                            { yAxisID: 'units' },
+                            { yAxisID: 'units' },
+                            { yAxisID: 'units' }
                         ]
                 };
             }
@@ -127,7 +125,10 @@
                 var show = [ quarter.showgraph.pg1, quarter.showgraph.pg1, 
                              quarter.showgraph.pg2, quarter.showgraph.pg2, 
                              quarter.showgraph.usage, quarter.showgraph.usage, quarter.showgraph.usage, quarter.showgraph.usage ];
-                console.log(show);
+
+                quarter.histfiltered.series = quarter.hist.series.filter((o, i) => show[i]);
+                quarter.histfiltered.data = quarter.hist.data.filter((o, i) => show[i]);
+                quarter.histfiltered.datasetOverride = quarter.hist.datasetOverride.filter((o, i) => show[i]);
             }
             
             var view = function() {
@@ -158,7 +159,8 @@
                                 showgraph: { pg1: true, pg2: true, usage: true }
                             };
 
-                            q.hist = GetChartData(qdata, q);                            
+                            q.hist = GetChartData(qdata, q);
+                            q.histfiltered = JSON.parse(JSON.stringify(q.hist));
                             q.current.globalAttainment = ((50*q.current.PG1 + 20*q.current.PG2 + 20*q.current.Usage + 10*q.current.EMSUsage)/100).toFixed(0);
                             q.current.nicePG1Togo = formatCurrency(q.current.PG1Togo);
                             q.current.nicePG2Togo = formatCurrency(q.current.PG2Togo);
