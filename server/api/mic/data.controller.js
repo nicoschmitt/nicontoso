@@ -105,7 +105,7 @@
                     if (doc) {
                         // Alert if quota changed
                         var quotaChanged = false;
-                        var msg = "Something has changed for " + req.body.quarter + ".<br />\r\n";
+                        var msg = `Something has changed for ${req.body.quarter}.<br />\r\n`;
                         Object.keys(req.body).forEach(k => {
                             if (k.toLowerCase().indexOf("target") >= 0) {
                                 if (doc[k] != req.body[k]) {
@@ -120,7 +120,7 @@
 
                         // Alert if +5% in PG1 or PG2
                         if (req.body["PG1"] - doc["PG1"] >= 5 || req.body["PG2"] - doc["PG2"] >= 5) {
-                            msg = "Big raised in attainment: <br />\r\n";
+                            msg = `Big raised in attainment for ${req.body.quarter}: <br />\r\n`;
                             msg += "  PG1 is now " + req.body["PG1"] + ", was " + doc["PG1"] + "<br />\r\n";
                             msg += "  PG2 is now " + req.body["PG2"] + ", was " + doc["PG2"] + "<br />\r\n";
 
