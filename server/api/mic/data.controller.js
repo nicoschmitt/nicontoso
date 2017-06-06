@@ -126,6 +126,15 @@
 
                             SendMail(user, msg, req.headers.host, () => {});
                         }
+
+                        // Alert if actuals decreased 
+                        if (req.body["PG1"] < doc["PG1"] || req.body["PG2"] < doc["PG2"]) {
+                            msg = `Attainment decreased for ${req.body.quarter}: <br />\r\n`;
+                            msg += "  PG1 is now " + req.body["PG1"] + ", was " + doc["PG1"] + "<br />\r\n";
+                            msg += "  PG2 is now " + req.body["PG2"] + ", was " + doc["PG2"] + "<br />\r\n";
+
+                            SendMail(user, msg, req.headers.host, () => {});
+                        }
                     }
                    
                     var data = new MicData({ user: user });
