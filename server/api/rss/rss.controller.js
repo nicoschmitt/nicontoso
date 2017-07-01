@@ -10,14 +10,14 @@
     let entities = require("entities");
 
     module.exports.reddit = function(req, res) {
-        var url = "http://www.reddit.com/.rss";
+        let url = "http://www.reddit.com/.rss";
         
         request.get(url, function(err, httpResponse, body) {
             xml2js.parseString(body, function (err, rss) {
                 
                 rss.feed.entry.forEach(function(element) {
-                    var content = element.content[0]["_"];
-                    var link = content.substring(0, content.lastIndexOf("\">[link]"));
+                    let content = element.content[0]["_"];
+                    let link = content.substring(0, content.lastIndexOf("\">[link]"));
                     link = link.substring(link.lastIndexOf("href") + "href= ".length);
                     link = entities.decodeHTML(link);
                     element.link[0]["$"].href = link;
@@ -55,14 +55,13 @@
     }
 
     function findInVLCache(cache, type, lang) {
-        for(var i = 0; i < cache.length; i++) {
+        for(let i = 0; i < cache.length; i++) {
             if (cache[i].doctype == type && cache[i].language == lang) return cache[i];
         }
         return null;
     }
 
     module.exports.vldocs = function(req, res) {
-
         let url = 'http://www.microsoftvolumelicensing.com/DocumentSearchService.asmx/GetSearchResults';
 
         let documents = {

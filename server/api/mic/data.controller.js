@@ -88,7 +88,7 @@
     };
     
     module.exports.putdata = function(req, res) {
-        var user = req.params.user;
+        let user = req.params.user;
         
         console.log("record data for user " + user);
 
@@ -104,8 +104,8 @@
                 MicData.findOne({ user: user, fiscal: req.body.fiscal, quarter: req.body.quarter }).sort("-date").exec(function(err, doc) {
                     if (doc) {
                         // Alert if quota changed
-                        var quotaChanged = false;
-                        var msg = `Something has changed for ${req.body.quarter}.<br />\r\n`;
+                        let quotaChanged = false;
+                        let msg = `Something has changed for ${req.body.quarter}.<br />\r\n`;
                         Object.keys(req.body).forEach(k => {
                             if (k.toLowerCase().indexOf("target") >= 0) {
                                 if (doc[k] != req.body[k]) {
@@ -120,7 +120,7 @@
 
                         // Alert if +5% in PG1 or PG2
                         if (req.body["PG1"] - doc["PG1"] >= 5 || req.body["PG2"] - doc["PG2"] >= 5) {
-                            msg = `Big raised in attainment for ${req.body.quarter}: <br />\r\n`;
+                            msg = `Big raise in attainment for ${req.body.quarter}: <br />\r\n`;
                             msg += "  PG1 is now " + req.body["PG1"] + ", was " + doc["PG1"] + "<br />\r\n";
                             msg += "  PG2 is now " + req.body["PG2"] + ", was " + doc["PG2"] + "<br />\r\n";
 
@@ -129,7 +129,7 @@
 
                         // Alert if actuals decreased 
                         if (req.body["PG1"] < doc["PG1"] || req.body["PG2"] < doc["PG2"]) {
-                            msg = `Attainment decreased for ${req.body.quarter}: <br />\r\n`;
+                            msg = `Attainment decrease for ${req.body.quarter}: <br />\r\n`;
                             msg += "  PG1 is now " + req.body["PG1"] + ", was " + doc["PG1"] + "<br />\r\n";
                             msg += "  PG2 is now " + req.body["PG2"] + ", was " + doc["PG2"] + "<br />\r\n";
 
