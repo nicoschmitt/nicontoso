@@ -1,15 +1,13 @@
 (function(){
-   
-    var request = require("request");
-    var xml2js = require('xml2js');
-    var builder = new xml2js.Builder();
-    var RSS = require('rss');
-    var moment = require("moment");
-    var async = require("async");
-    var cheerio = require('cheerio');
-    var RSSVL = require("./rssvl.model");
-    var entities = require("entities");
-    var moment = require("moment");
+    let request = require("request");
+    let xml2js = require('xml2js');
+    let builder = new xml2js.Builder();
+    let RSS = require('rss');
+    let moment = require("moment");
+    let async = require("async");
+    let cheerio = require('cheerio');
+    let RSSVL = require("./rssvl.model");
+    let entities = require("entities");
 
     module.exports.reddit = function(req, res) {
         var url = "http://www.reddit.com/.rss";
@@ -65,41 +63,41 @@
 
     module.exports.vldocs = function(req, res) {
 
-        var urltemplate = "http://www.microsoftvolumelicensing.com/DocumentSearch.aspx?Mode=3&DocumentTypeId={doctype}&Language={lang}";
+        let url = 'http://www.microsoftvolumelicensing.com/DocumentSearchService.asmx/GetSearchResults';
 
-        var documents = {
+        let documents = {
             SLA: 37,
             OST: 46,
             PT: 53
         };
 
-        var languages = {
+        let languages = {
             English: 1,
             French: 9
         };
 
-        var all = [];
-        for (var d in documents) {
-            for (var l in languages) {
-                all.push([ d, l ]);
+        let all = [];
+        for (let d in documents) {
+            for (let l in languages) {
+                all.push({ doc: d, lang: l });
             }
         }
     
-        var feed = new RSS({
+        let feed = new RSS({
             title:       'Volume licensing',
             description: 'VL documents',
             site_url :   "http://" + req.headers.host + "/api/redirect/https://www.microsoft.com/en-us/licensing/product-licensing/products.aspx",
             ttl: 24*60 // 1 day
         });
 
-        var current = moment().format("MMMMYYYY");
+        let current = moment().format("MMMMYYYY");
        
         getVLCache(current, function(err, cache) {
             if (err) { console.log(err); return res.status(500).send(err); }
 
             async.map(all, function(item, cb) {
 
-                var elt = findInVLCache(cache, item[0], item[1]);
+                let elt = findInVLCache(cache, item.doc, item.lang);
                 if (elt != null) {
                     return cb(null, {
                         id: elt.name,
@@ -109,45 +107,47 @@
                     });
                 }
 
-                var url = urltemplate.replace("{doctype}", documents[item[0]]);
-                url = url.replace("{lang}", languages[item[1]]);
-                
-                request.get(url, function(err, httpResponse, body) {
+                let json = {
+                    filterValues: [
+                        {"Key": "@DocumentTypeID", "Value": documents[item.doc].toString()},
+                        {"Key": "@LanguageID", "Value": languages[item.lang].toString()},
+                        {"Key": "@RegionID", "Value": 0},
+                        {"Key": "@SectorID", "Value": 0},
+                    ],
+                };
+
+                request.post({url: url, json: true, body: json}, function(err, httpResponse, body) {
                     if (err) return cb(err, null);
 
-                    $ = cheerio.load(body);
-                    var doc = $("#dgDocuments tr").last().find("td").first().find("a");
-                    var name = doc.text();
+                    let results = JSON.parse(body.d).Root.Document;
+                    let filename = results[0]['@FileName'];
+                    let title = results[0]['@Title'];
+                    let docId = results[0]['@DocumentID'];
 
-                    if (name == "Title") {
-                        doc = $("#dgDocumentsArchived tr").eq(1).find("td").first().find("a");
-                        name = doc.text();
-                    }
-
-                    var month = name.substring(name.lastIndexOf("(") + 1);
+                    var month = title.substring(title.lastIndexOf("(") + 1);
                     month = month.substring(0, month.indexOf(")"));
                 
                     elt = new RSSVL({
                         month: current,
-                        doctype: item[0],
-                        language: item[1],
-                        name: name,
-                        url: "http://www.microsoftvolumelicensing.com/" + doc.attr("href")
+                        doctype: item.doc,
+                        language: item.lang,
+                        name: title,
+                        url: 'http://www.microsoftvolumelicensing.com/Downloader.aspx?DocumentId=' + docId,
                     });
                     if (month == current) {
                         elt.save(function(){
                             return cb(null, {
-                                id: name,
+                                id: filename,
                                 month: month,
-                                title: name + ".docx",
+                                title: filename,
                                 url: elt.url
                             });
                         });
                     } else {
                         return cb(null, {
-                            id: name,
+                            id: filename,
                             month: month,
-                            title: name + ".docx",
+                            title: filename,
                             url: elt.url
                         });
                     }
@@ -176,9 +176,6 @@
                 res.removeHeader("Pragma");
                 res.type("application/rss+xml").send(feed.xml({ indent: true }));
             });
-            
         });
-
     }
-  
 }());
