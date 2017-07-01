@@ -5,7 +5,6 @@
     let RSS = require('rss');
     let moment = require("moment");
     let async = require("async");
-    let cheerio = require('cheerio');
     let RSSVL = require("./rssvl.model");
     let entities = require("entities");
 
