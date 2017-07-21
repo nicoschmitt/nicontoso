@@ -118,9 +118,10 @@
                     if (err) return cb(err, null);
 
                     let results = JSON.parse(body.d).Root.Document;
-                    let filename = results[0]['@FileName'];
-                    let title = results[0]['@Title'];
-                    let docId = results[0]['@DocumentID'];
+                    if (Array.isArray(results)) results = results[0];
+                    let filename = results['@FileName'];
+                    let title = results['@Title'];
+                    let docId = results['@DocumentID'];
 
                     var month = title.substring(title.lastIndexOf("(") + 1);
                     month = month.substring(0, month.indexOf(")"));

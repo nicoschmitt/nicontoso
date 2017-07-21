@@ -14,7 +14,7 @@ var compression = require("compression");
 
 var mongoose = require("mongoose");
 mongoose.Promise = global.Promise;
-mongoose.connect(mongo);
+mongoose.connect(mongo, { useMongoClient: true });
 
 var express = require('express');
 var bodyParser = require('body-parser');
