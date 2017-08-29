@@ -10,7 +10,7 @@
     "url": "https://github.com/nicoschmitt/nicontoso"
   },
   "engines": {
-    "node": "8.1.4"
+    "node": "8.4.0"
   },
   "dependencies": {
     "async": "^2.5.0",
@@ -23,9 +23,9 @@
     "del": "^3.0.0",
     "dotenv": "^4.0.0",
     "entities": "^1.1.1",
-    "express": "^4.15.3",
+    "express": "^4.15.4",
     "gulp": "^3.9.1",
-    "gulp-babel": "^6.1.2",
+    "gulp-babel": "^7.0.0",
     "gulp-concat": "^2.6.1",
     "gulp-cssnano": "^2.1.2",
     "gulp-rename": "^1.2.2",
@@ -35,18 +35,18 @@
     "gulp-util": "^3.0.8",
     "jwt-simple": "^0.5.1",
     "moment": "^2.18.1",
-    "mongodb": "^2.2.30",
-    "mongoose": "^4.11.3",
-    "passport": "^0.3.2",
+    "mongodb": "^2.2.31",
+    "mongoose": "^4.11.9",
+    "passport": "^0.4.0",
     "passport-azure-ad": "^3.0.8",
     "passport-strategy": "^1.0.0",
     "querystring": "^0.2.0",
     "request": "^2.81.0",
     "rss": "^1.2.2",
-    "sendgrid": "^5.2.0",
+    "sendgrid": "^5.2.3",
     "shortid": "^2.2.8",
     "util": "^0.10.3",
-    "xml2js": "^0.4.17"
+    "xml2js": "^0.4.19"
   },
   "private": true
 }

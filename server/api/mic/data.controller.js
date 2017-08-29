@@ -89,7 +89,8 @@
     
     module.exports.putdata = function(req, res) {
         let user = req.params.user;
-        
+        if (req.body.fiscal !== proces.env.CURRENT_FISCAL) return res.status(500).send('Switch to ' + proces.env.CURRENT_FISCAL);
+
         console.log("record data for user " + user);
 
         var m = moment.utc(req.body.date, "DD/MM/YYYY");
