@@ -1,9 +1,9 @@
 (function(){
     
-    var mongoose = require('mongoose');
-    var shortid = require("shortid");
+    let mongoose = require('mongoose');
+    let shortid = require("shortid");
 
-    var dataSchema = new mongoose.Schema({ 
+    let oldDataSchema = new mongoose.Schema({ 
         _id: {
             type: String,
             unique: true,
@@ -40,8 +40,27 @@
         
         // Voice: Number,
         // VoiceTarget: Number
-    })
+    });
+
+    let dataSchema = new mongoose.Schema({
+        _id: {
+            type: String,
+            unique: true,
+            'default': shortid.generate
+        },
         
-    module.exports = mongoose.model("MicData", dataSchema);
+        user: String,
+        date: Date,
+        fiscal: String,
+        quarter: String,
+
+        targets: mongoose.Schema.Types.Mixed,
+        actuals: mongoose.Schema.Types.Mixed,
+    });
+        
+    module.exports = {
+        old: mongoose.model("MicData", oldDataSchema),
+        current: mongoose.model("MintData", dataSchema),
+    };
     
 }());

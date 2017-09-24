@@ -1,13 +1,14 @@
 (function(){
-    var moment     = require("moment");
-    var MicData    = require("./data.model");
-    var UpdateInfo = require("./info.model");
-    var sendgrid   = require('sendgrid');
+    let moment     = require("moment");
+    let AppData    = require("./data.model");
+    let UpdateInfo = require("./info.model");
+    let sendgrid   = require('sendgrid');
 
     function GetDataForUser(user, fiscal, cb) {
-        MicData.find({ user: user, fiscal: fiscal }, { user:0, fiscal:0, _id: 0, __v: 0 }).sort("date").lean().exec(function(err, data) {
+        let Data = (fiscal === 'FY17') ? AppData.old : AppData.current;
+        Data.find({ user: user, fiscal: fiscal }, { user:0, fiscal:0, _id: 0, __v: 0 }).sort("date").lean().exec(function(err, data) {
             if (data && data.length > 0) {
-                var latest = data[data.length - 1].date.getTime();
+                let latest = data[data.length - 1].date.getTime();
                 data.forEach(d => {
                     d.current = (d.date.getTime() == latest) ? 1 : 0;
                 });
@@ -17,12 +18,12 @@
     }
   
     function SendMail(user, msg, host, callback) {
-        var sender = sendgrid(process.env.SENDGRID_APIKEY);
-        var helper = sendgrid.mail;
+        let sender = sendgrid(process.env.SENDGRID_APIKEY);
+        let helper = sendgrid.mail;
 
         if (user.indexOf("@") < 0) user += "@" + process.env.MIC_ACCESS_DOMAIN;
 
-        var fullmsg = "<div style='font-size:11.0pt;font-family:\"Calibri\",sans-serif;'>";
+        let fullmsg = "<div style='font-size:11.0pt;font-family:\"Calibri\",sans-serif;'>";
         fullmsg += msg;
         fullmsg += "<p>Go to <a href='https://" + host + "/#Mic'>MyMic</a></p></div>";
 
@@ -33,8 +34,8 @@
             new helper.Content("text/html", fullmsg)
         );
 
-        var emptyRequest = require('sendgrid-rest').request;
-        var requestPost = sender.emptyRequest();
+        let emptyRequest = require('sendgrid-rest').request;
+        let requestPost = sender.emptyRequest();
         requestPost.method = 'POST';
         requestPost.path = '/v3/mail/send';
         requestPost.body = mail.toJSON();
@@ -45,11 +46,11 @@
     }
   
     module.exports.getcurrentdata = function(req, res) {
-        var email = req.user.unique_name;
+        let email = req.user.unique_name;
         if (!email.endsWith("@" + process.env.MIC_ACCESS_DOMAIN)) return res.json({});
-        var user = email.substr(0, email.indexOf("@"));
+        let user = email.substr(0, email.indexOf("@"));
 
-        var fiscal = req.query.fiscal || process.env.CURRENT_FISCAL;
+        let fiscal = req.query.fiscal || process.env.CURRENT_FISCAL;
         
         UpdateInfo.findOne({ user: user }, function(err, info) {
             GetDataForUser(user, fiscal, function(data) {
@@ -62,13 +63,13 @@
     }
   
     module.exports.getdata = function(req, res) {
-        var user = req.params.user;
-        var quarter = req.query.quarter;
-        var full = req.query.full;
-        var fiscal = req.query.fiscal || process.env.CURRENT_FISCAL;
+        let user = req.params.user;
+        let quarter = req.query.quarter;
+        let full = req.query.full;
+        let fiscal = req.query.fiscal || process.env.CURRENT_FISCAL;
         
         if (!quarter) {
-            var month = moment().month();
+            let month = moment().month();
             if (month < 3) quarter = "Q3";
             else if (month < 7) quarter = "Q4"; // July is like Q4
             else if (month < 9) quarter = "Q1";
@@ -80,8 +81,9 @@
                 return res.json(data);
             });
         } else {
-            var search = { user: user, fiscal: fiscal, quarter: quarter };
-            MicData.findOne(search, { user:0, fiscal:0, _id: 0, __v: 0 }).sort("-date").exec(function(err, data) {
+            let search = { user: user, fiscal: fiscal, quarter: quarter };
+            let Data = (fiscal === 'FY17') ? AppData.old : AppData.current;
+            Data.findOne(search, { user:0, fiscal:0, _id: 0, __v: 0 }).sort("-date").exec(function(err, data) {
                 return res.json(data);
             });
         }
@@ -93,16 +95,17 @@
 
         console.log("record data for user " + user);
 
-        var m = moment.utc(req.body.date, "DD/MM/YYYY");
+        let m = moment.utc(req.body.date, "DD/MM/YYYY");
         if (!m.isValid()) return res.status(400).send("invalid date");
         req.body.date = m.toDate();
         
-        MicData.findOne({ user: user, fiscal: req.body.fiscal, quarter: req.body.quarter, date: req.body.date }, function(err, doc) {
+        let Data = (req.body.fiscal === 'FY17') ? AppData.old : AppData.current;
+        Data.findOne({ user: user, fiscal: req.body.fiscal, quarter: req.body.quarter, date: req.body.date }, function(err, doc) {
             if (doc) {
                 console.log("already exists");
                 res.json({ already: true });
             } else {
-                MicData.findOne({ user: user, fiscal: req.body.fiscal, quarter: req.body.quarter }).sort("-date").exec(function(err, doc) {
+                Data.findOne({ user: user, fiscal: req.body.fiscal, quarter: req.body.quarter }).sort("-date").exec(function(err, doc) {
                     if (doc) {
                         // Alert if quota changed
                         let quotaChanged = false;
@@ -138,7 +141,7 @@
                         }
                     }
                    
-                    var data = new MicData({ user: user });
+                    let data = new Data({ user: user });
                     Object.keys(req.body).forEach(k => {
                         data[k] = req.body[k];
                     });

@@ -1,12 +1,12 @@
 (function(){
     
-    var mongoose = require('mongoose');
+    let mongoose = require('mongoose');
 
-    var dataSchema = new mongoose.Schema({ 
+    let dataSchema = new mongoose.Schema({ 
         user: String,
         when: Date
     })
         
-    module.exports = mongoose.model("MicUpdateInfo", dataSchema);
+    module.exports = mongoose.model("MintUpdateInfo", dataSchema);
     
 }());
