@@ -6,7 +6,6 @@
     var dataSchema = new mongoose.Schema({ 
         _id: {
             type: String,
-            unique: true,
             'default': shortid.generate
         },
         
